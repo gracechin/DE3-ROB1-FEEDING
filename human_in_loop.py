@@ -1,10 +1,9 @@
 import numpy as np
 
+# ext: get current status
+# ext: get coordinates of mouth
 
 
-#trajectory from A to B
-# call current coordinates in meters
-# call desired coordinates in meters
 
 
 
