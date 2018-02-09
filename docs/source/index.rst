@@ -13,7 +13,8 @@ Third year MEng Design Engineering undergraduates Robotics 1 Project (2018)
 
 .. toctree::
    :maxdepth: 3
-  
+   :caption: Franka Feeds
+
    franka 
    contact
 
