@@ -7,25 +7,22 @@ The goal of this project is to program the FRANKA Emika robotic arm (nicknamed â
 
 Key User Needs
 ^^^^^^^^^^^^^^
-To feel safe
-To have control of when they are fed
-To be fed without moving their arms
+- To feel safe
+- To have control of when they are fed
+- To be fed without moving their arms
 
-Description of the Live Demo Scenario
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Live Demo Scenario
+^^^^^^^^^^^^^^^^^^
 We want the live demo to show five key functions of the robot; detecting open/closed mouth, impedance control, arm manipulation, detect the user and mouth status, and put food on the utensil. Table 1 shows additional functions with lesser importance that can be added to the robot.
 
 The team will focus on achieving the most important functions first and making sure that they are safe and work properly. Once completed the team will move on to implementing the less important functions of the robot depending on time restrictions.
-
-Sketch of Live Demo Scenario
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. figure:: nstatic/arm_sketch.png
     :align: center
     :figclass: align-center
 
-Flowchart of Live Demo Scenario
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Flowchart
+^^^^^^^^^
 
 .. figure:: nstatic/flowchart.png
     :align: center
