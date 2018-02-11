@@ -16,7 +16,7 @@ Third year MEng Design Engineering undergraduates Robotics 1 Project (2018)
    :caption: Franka Feeds
 
    franka 
-   contact
+   help
 
 
 Indices and tables
