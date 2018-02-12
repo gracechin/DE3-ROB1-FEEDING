@@ -1,4 +1,4 @@
-Project Brief
+Overview
 =============
 
 The goal of this project is to program the FRANKA Emika robotic arm (nicknamed “Panda”) to prepare some breakfast and feed a person. The outcome of the project will be demonstrated by performing the whole scenario fully autonomously, including the perception of the person, the person’s mouth, etc. For inspiration, please watch this video:
