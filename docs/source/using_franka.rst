@@ -11,18 +11,12 @@ This 'site <https://frankaemika.github.io>' was used to install the live kernel,
 Connecting to FRANKA
 ^^^^^^^^^^^^^^^^^^^^
 
-Using Wifi
-""""""""""
+**Using Wifi:** The FRANKA connection should be automatically done.
 
-The FRANKA connection should be automatically done.
+**Using Ethernet Cable:** Create a wireless network using the IP address of the robot and IP address of the computer and use them to connect to the robot. After that you can connect to the web interface.
 
+**Using the Web Interface:**
 
-Using Ethernet Cable
-""""""""""""""""""""
-Create a wireless network using the IP address of the robot and IP address of the computer and use them to connect to the robot. After that you can connect to the web interface.
-
-Using the Web Interface
-"""""""""""""""""""""""
 To connect to the web interface go to https://robot.franka.de.
 
 Without using the lanline to connect FRANKA and the laptop, the web interface can be accessed through the IP address (https://192.168.0.88) to unlock the brakes before starting.
