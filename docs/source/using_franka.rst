@@ -23,8 +23,8 @@ Without using the lanline to connect FRANKA and the laptop, the web interface ca
 
 The login is:
 
-    username: robin
-    password: panda
+        username: robin
+        password: panda
 
 Connection between Franka and the computer terminal can be made done using Wifi or an ethernet cable.
 
