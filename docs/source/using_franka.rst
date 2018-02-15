@@ -6,7 +6,7 @@ Setting Up
 
 Visit https://de3-rob1-chess.readthedocs.io to see how franka was setted up.
 
-This 'site <https://frankaemika.github.io>' was used to install the live kernel, libfranka and franka_ros.
+This `site <https://frankaemika.github.io>`_ was used to install the live kernel, libfranka and franka_ros.
 
 Connecting to FRANKA
 ^^^^^^^^^^^^^^^^^^^^
