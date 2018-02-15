@@ -2,6 +2,8 @@
 
 This module uses ``subprocess`` and ``os``.
 """
+
+import __future__ 
 import subprocess
 import os
 
@@ -19,7 +21,37 @@ class FrankaControl:
         self.debug = debug_flag
         self.path = os.path.dirname(os.path.realpath(__file__))  # gets working dir of this file
 
-    def move_relative(self, dx: float=0.0, dy: float=0.0, dz: float=0.0):
+
+    def get_status(self):
+        """Gets Franka Arm status: current position.
+
+        Return print of the current position of the robot.
+        """
+
+        program = './franka_get_current_position'  # set executable to be used
+        command = [program, self.ip_address]
+        command_str = " ".join(command)
+
+        if self.debug:
+            print("Working directory: ", self.path)
+            print("Program: ", program)
+            print("IP Address of robot: ", self.ip_address)
+            print("Command being called: ", command_str)
+            print("Running FRANKA code...")
+
+        return_code = subprocess.call(command, cwd=self.path)
+
+        if return_code == 0:
+            if self.debug:
+                print("No problems running ", program)
+        else:
+            print("Python has registered a problem with ", program)
+            print(program)
+            print(command_str)
+
+        return return_code
+
+    def move_relative(self, dx=0.0, dy=0.0, dz=0.0):
         """Moves Franka Arm relative to its current position.
 
         Executes Franka C++ binary which moves the arm relative to its current position according
@@ -56,10 +88,12 @@ class FrankaControl:
                 print("No problems running ", program)
         else:
             print("Python has registered a problem with ", program)
+            print(program)
+            print(command_str)
 
         return return_code
 
-    def move_absolute(self, coordinates: list):
+    def move_absolute(self, coordinates=[]):
         """Moves Franka Arm to an absolute coordinate position.
 
         Coordinates list should be in format: [x, y, z]
