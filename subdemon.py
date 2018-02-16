@@ -18,7 +18,7 @@ import cv2
 #dont forget to $ roscore and  $ roslaunch openni2_launch openni2.launch
 #https://answers.ros.org/question/219029/getting-depth-information-from-point-using-python/ FOR MULTPLE INPUTS
 
-predictor_path = "/home/robin/DE3-ROB1-FEEDING/shape_predictor_68_face_landmarks.dat"
+predictor_path = "/home/robin/DE3-ROB1-FEEDING/perception/shape_predictor_68_face_landmarks.dat"
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 
@@ -40,7 +40,7 @@ class image_converter:
 
     except CvBridgeError as e:
       print(e)
-    
+    print(type(depth_image))
     print(depth_image[300,300])
 
     cv2.imshow("Depth window", depth_image_raw)
