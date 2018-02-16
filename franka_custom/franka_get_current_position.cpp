@@ -34,11 +34,10 @@ int main(int argc, char** argv) {
       auto state_pose = robot_state.O_T_EE_d;
       std::array<double, 16> current_pose = state_pose;
 
-      //std::cout << "current position x y z: " << current_pose[12] << "  " << current_pose[13] << "  " << current_pose[14] << std::endl; 
-      std::cout << "[" << current_pose[12] << "," << current_pose[13] << "," << current_pose[14] << "]" << std::endl; 
-      //sleep(1); 
+      std::cout << "current position x y z: " << current_pose[12] << "  " << current_pose[13] << "  " << current_pose[14] << std::endl; 
+      sleep(1); 
 
-      return 0; 
+      return 1; 
     });
 
   } catch (const franka::Exception& e) {
