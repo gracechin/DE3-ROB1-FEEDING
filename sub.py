@@ -18,7 +18,7 @@ import cv2
 #dont forget to roslaunch openni2_launch openni2.launch
  
 
-predictor_path = "./perceptio/shape_predictor_68_face_landmarks.dat"
+predictor_path = "/home/robin/DE3-ROB1-FEEDING/perception/shape_predictor_68_face_landmarks.dat"
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 
