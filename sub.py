@@ -18,7 +18,7 @@ import cv2
 #dont forget to roslaunch openni2_launch openni2.launch
  
 
-predictor_path = "./perceptio/shape_predictor_68_face_landmarks.dat"
+predictor_path = "/home/robin/DE3-ROB1-FEEDING/perception/shape_predictor_68_face_landmarks.dat"
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 
@@ -55,6 +55,7 @@ class image_converter:
       mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2
       mouth_center_y = mouth_bottom[1] +(mouth_top[1]-mouth_bottom[1])/2
       cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
+      print (mouth_center_x, mouth_center_y)
     
       # cv2.polylines(cv_image, [inside_points],True, (0,255,255))
     # if cols > 60 and rows > 60 :
@@ -62,11 +63,11 @@ class image_converter:
 
     cv2.imshow("Image window", cv_image)
     cv2.waitKey(1)
-
     # try:
     #   self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
     # except CvBridgeError as e:
     #   print(e)
+
 
 def main(args):
   ic = image_converter()
