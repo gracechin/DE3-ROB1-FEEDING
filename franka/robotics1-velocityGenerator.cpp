@@ -18,7 +18,7 @@
 
 int main(int argc, char** argv) {
   if (argc != 5) {
-    std::cerr << "Usage: ./generate_cartesian_velocity_motion <robot-hostname> delta_x delta_y delta_z" << std::endl;
+    std::cerr << "Usage: ./generate_cartesian_velocity_motion <robot-hostname> delta_x" << std::endl;
     return -1;
   }
   try {
@@ -58,16 +58,8 @@ int main(int argc, char** argv) {
     double target_y = current_pose[13] + atof(argv[3]); 
     double target_z = current_pose[14] + atof(argv[4]); 
 
-    //  count_loop = 0; 
-
     robot.control([=, &time](const franka::RobotState& robot_state,
                              franka::Duration time_step) -> franka::CartesianVelocities {
-
-      // if (count_loop % 1000 == 0) {
-      //   auto initial_pose = robot.readOnce().O_T_EE_d;
-      //   std::array<double, 16> current_pose = initial_pose;
-      //   cout << "current position (x,y,z): (" << current_pose[12] << "," << current_pose[13] << "," << current_pose[12] << ")" << endl;
-      // }
 
       double vel_x = 0.0; 
       double vel_y = 0.0; 
@@ -91,14 +83,16 @@ int main(int argc, char** argv) {
       double vec_y = target_y - cur_y;
       double vec_z = target_z - cur_z; 
 
-
-
       double l2_norm = sqrt(vec_x*vec_x + vec_y*vec_y + vec_z*vec_z); 
 
-      if (l2_norm < 0.02) {
-          vel_x = 0.9*old_vel_x;
-          vel_y = 0.9*old_vel_y; 
-          vel_z = 0.9*old_vel_z; 
+      if (l2_norm < 0.01) {
+          vel_x = 0.0; 
+          vel_y = 0.0; 
+          vel_z = 0.0; 
+          // stop program when target reached
+          std::cout << std::endl << "Finished motion, shutting down example" << std::endl;
+          franka::CartesianVelocities output = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+          return franka::MotionFinished(output);
       }
       else {
         vel_x = speed*(vec_x / l2_norm);
@@ -115,21 +109,6 @@ int main(int argc, char** argv) {
       old_vel_z = vel_z;
 
       franka::CartesianVelocities output = {{vel_x, vel_y, vel_z, 0.0, 0.0, 0.0}};
-
-      double vel_norm = sqrt(vel_x*vel_x + vel_y*vel_y + vel_z*vel_z); 
-      if (vel_norm < 0.001) {
-        // stop program when target reached
-        std::cout << std::endl << "Finished motion, shutting down..." << std::endl << std::flush;
-        franka::CartesianVelocities output = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
-        return franka::MotionFinished(output);
-      }
-
-      // count_loop++; 
-      // if (count_loop == 1000000) {
-      //   count_loop = 0; 
-      // }
-
-
       // franka::CartesianVelocities output = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
 /*      if (time >= 2 * time_max) {
         std::cout << std::endl << "Finished motion, shutting down example" << std::endl;
