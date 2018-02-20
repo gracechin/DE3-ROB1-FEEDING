@@ -2,6 +2,10 @@ import subprocess
 import rospy
 from std_msgs.msg import String
 from franka.franka_control import FrankaControl
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn import datasets, linear_model
+from sklearn.metrics import mean_squared_error, r2_score
 
 # initiating FrankaControl
 arm = FrankaControl(debug_flag=True) 
@@ -25,25 +29,34 @@ def default():
 
 ## SUBSCRIBING MOUTH NODE --------------------------
 # callback function used by the subscriber
-def mouth_node_sub(callback_func):
+def mouth_node_sub(callback_func, loop_tf = True):
 	try:
-		# initialise the node
-		rospy.init_node("chat_subscriber_node", anonymous=True)
-		# subscribe to the chat topic and attach the callback function
-		rospy.Subscriber("/mouthxy", String, callback_func)
-		# loop forever
-		rospy.spin()
+		loop =True
+		while (loop):
+			# initialise the node
+			rospy.init_node("read_mouth_location", anonymous=True)
+			# subscribe to the chat topic and attach the callback function
+			rospy.Subscriber("/mouthxyz", String, callback_func)
+			# loop forever
+			loop = loop_tf
 	except: 
 		print("mouth_node_sub error")
 		pass
 
-def show_message(message):
-    print(message.data)
+def return_uvw(mouthuvw):
+	print(mouthuvw.data)
+	return mouthuvw.data
+
+## CALIBRATION ---------------------------
+def record_data_pt(uvw_pt, xyz_pt):
+	uvw_pt.append(mouth_node_sub(return_uvw))
+	xyz_pt.append(arm.get_end_effector_pos())
+
 
 ## MAIN --------------------------
 def main():
-	mouth_node_sub(show_message)
+	mouth_node_sub(return_uvw)
 
-	#arm.get_status()
+	#arm.get_end_effector_pos()
 
 main()
