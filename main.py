@@ -2,6 +2,7 @@ import subprocess
 import rospy
 from std_msgs.msg import String
 from franka.franka_control import FrankaControl
+from subd import image_converter
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import datasets, linear_model
@@ -27,21 +28,21 @@ def default():
 	arm.move_absolute([0.0, 0.0, 0.0]) #< still not set
 
 
-## SUBSCRIBING MOUTH NODE --------------------------
-# callback function used by the subscriber
-def mouth_node_sub(callback_func, loop_tf = True):
-	try:
-		loop =True
-		while (loop):
-			# initialise the node
-			rospy.init_node("read_mouth_location", anonymous=True)
-			# subscribe to the chat topic and attach the callback function
-			rospy.Subscriber("/mouthxyz", String, callback_func)
-			# loop forever
-			loop = loop_tf
-	except: 
-		print("mouth_node_sub error")
-		pass
+# ## SUBSCRIBING MOUTH NODE --------------------------
+# # callback function used by the subscriber
+# def mouth_node_sub(callback_func, loop_forever = True):
+# 	try:
+# 		loop =True
+# 		while (loop):
+# 			# initialise the node
+# 			rospy.init_node("read_mouth_location", anonymous=True)
+# 			# subscribe to the chat topic and attach the callback function
+# 			rospy.Subscriber("/mouthxyz", String, callback_func)
+# 			# loop forever
+# 			loop = loop_forever
+# 	except:
+# 		print("mouth_node_sub error")
+# 		pass
 
 def return_uvw(mouthuvw):
 	print(mouthuvw.data)
@@ -55,7 +56,7 @@ def record_data_pt(uvw_pt, xyz_pt):
 
 ## MAIN --------------------------
 def main():
-	mouth_node_sub(return_uvw)
+	image_converter()
 
 	#arm.get_end_effector_pos()
 
