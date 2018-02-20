@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import roslib
 #roslib.load_manifest('my_package')
-import message_filters 
+import message_filters
 from message_filters import Subscriber
 import sys
 import rospy
@@ -40,7 +40,7 @@ class image_converter:
 		print('init')
 
 	def callback_d(self,img,depth):
-		
+
 		try:
 			depth_image_raw = self.bridge.imgmsg_to_cv2(depth, "passthrough")
 			depth_image = ((255*depth_image_raw)).astype(np.uint8)
@@ -53,7 +53,7 @@ class image_converter:
 		# print(type(cv_image))
 		# print(type(depth_image))
 
-	
+
 
 		gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 		rects = detector(gray, 1)
@@ -64,39 +64,39 @@ class image_converter:
 
 
 		for (i, rect) in enumerate(rects):
-		  shape = predictor(gray, rect)
-		  shape = face_utils.shape_to_np(shape)
-		  features = face_utils.FACIAL_LANDMARKS_IDXS.items()
-		  # mouth = features[0]
-		  # points = shape[mouth[1][0]:mouth[1][1]]
-		  # for (x,y) in points: 
-		  #   cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)
+			shape = predictor(gray, rect)
+			shape = face_utils.shape_to_np(shape)
+			features = face_utils.FACIAL_LANDMARKS_IDXS.items()
+			# mouth = features[0]
+			# points = shape[mouth[1][0]:mouth[1][1]]
+			# for (x,y) in points:
+			#   cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)
 
-		  # inside_points = shape[60:68]
-		  mouth_top = shape[62]
-		  mouth_bottom = shape[66]
-		  mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2
-		  mouth_center_y = mouth_bottom[1] +(mouth_top[1]-mouth_bottom[1])/2
-		  cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
+			# inside_points = shape[60:68]
+			mouth_top = shape[62]
+			mouth_bottom = shape[66]
+			mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2
+			mouth_center_y = mouth_bottom[1] +(mouth_top[1]-mouth_bottom[1])/2
+			cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
-		  mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
-		  mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
-		  cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
+			mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
+			mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
+			cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
-		  print (mouthxyz)
-		  
-		  #print(depth_image_clone[mouth_center_x, mouth_center_y])
-		  
+			print (mouthxyz)
+
+		#print(depth_image_clone[mouth_center_x, mouth_center_y])
+
 		#print(depth_image[240,500])
 		#cv2.circle(depth_image, (240, 500), 1, (255, 0, 255), 5)
 		cv2.imshow("Depth window", depth_image_clone)
 		cv2.imshow("Image window", cv_image)
 		cv2.waitKey(1)
 
-		# try:
-		#   self.image_pub.publish(String(mouthxyz))
-		# except CvBridgeError as e:
-		#   print(e)
+		try:
+		  self.image_pub.publish(String(mouthxyz))
+		except CvBridgeError as e:
+		  print(e)
 		# print(np.size(cv_image) , np.size(depth_image))
 
 def main(args):
@@ -109,4 +109,4 @@ def main(args):
 	cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-		main(sys.argv)
+	main(sys.argv)
