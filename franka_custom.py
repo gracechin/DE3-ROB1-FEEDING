@@ -23,19 +23,22 @@ class FrankaCustom:
         self.path = os.path.dirname(os.path.realpath(__file__))  # gets working dir of this file
 
 
-    def mouth_pos(self, callback_func, loop = True):
+    def get_mouth_pos(self, callback_func):
         """Gets mouth position
 
         Return mouth position: list [u, v, w]
         """
-
         return
+
+
+
 
     def uvw_xyz_calibration(self):
         """Finds the matrix A, such that ([u, v, w]')*[A] --> [x, y, z]'
 
         Return matrix A
         """
+
         return
 
 
