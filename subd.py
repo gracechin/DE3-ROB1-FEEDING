@@ -39,10 +39,10 @@ class image_converter:
 		print('init')
 
 	def callback_d(self,img,depth):
-		print("running")
+		
 		try:
 			depth_image_raw = self.bridge.imgmsg_to_cv2(depth, "passthrough")
-			depth_image = (200*depth_image_raw).astype(np.uint8)
+			depth_image = ((255*depth_image_raw)).astype(np.uint8)
 		except CvBridgeError as e:
 			print(e)
 		try:
@@ -52,20 +52,26 @@ class image_converter:
 		# print(type(cv_image))
 		# print(type(depth_image))
 
+	
 
 		gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 		rects = detector(gray, 1)
+		depth_image_clone = depth_image
+
+		#are picture frames different size? both are 480,640 
+		# print(depth_image_clone.shape)
+
 
 		for (i, rect) in enumerate(rects):
 		  shape = predictor(gray, rect)
 		  shape = face_utils.shape_to_np(shape)
 		  features = face_utils.FACIAL_LANDMARKS_IDXS.items()
-		  mouth = features[0]
-		  points = shape[mouth[1][0]:mouth[1][1]]
+		  # mouth = features[0]
+		  # points = shape[mouth[1][0]:mouth[1][1]]
 		  # for (x,y) in points: 
 		  #   cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)
 
-		  inside_points = shape[60:68]
+		  # inside_points = shape[60:68]
 		  mouth_top = shape[62]
 		  mouth_bottom = shape[66]
 		  mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2
@@ -74,14 +80,15 @@ class image_converter:
 
 		  mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
 		  mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
+		  cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
 		  print (mouthxyz)
-		  # print(depth_image[mouth_center_x, mouth_center_y])
-		  # cv2.circle(depth_image, (mouth_center_x, mouth_center_y), 1, (mouth_center_z, 0, 0), 20)
-
+		  
+		  #print(depth_image_clone[mouth_center_x, mouth_center_y])
+		  
 		#print(depth_image[240,500])
 		#cv2.circle(depth_image, (240, 500), 1, (255, 0, 255), 5)
-		cv2.imshow("Depth window", depth_image)
+		cv2.imshow("Depth window", depth_image_clone)
 		cv2.imshow("Image window", cv_image)
 		cv2.waitKey(1)
 
