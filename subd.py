@@ -18,6 +18,7 @@ import dlib
 import cv2
 
 #dont forget to $ roscore and  $ roslaunch openni2_launch openni2.launch
+#this is a clone
 #https://answers.ros.org/question/219029/getting-depth-information-from-point-using-python/ FOR MULTPLE INPUTS
 
 predictor_path = "/home/robin/DE3-ROB1-FEEDING/perception/shape_predictor_68_face_landmarks.dat"
