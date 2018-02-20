@@ -1,3 +1,4 @@
+import sys
 import subprocess
 import rospy
 from std_msgs.msg import String
@@ -5,8 +6,7 @@ from franka.franka_control import FrankaControl
 from subd import image_converter
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import datasets, linear_model
-from sklearn.metrics import mean_squared_error, r2_score
+
 
 # initiating FrankaControl
 arm = FrankaControl(debug_flag=True) 
@@ -55,9 +55,21 @@ def record_data_pt(uvw_pt, xyz_pt):
 
 
 ## MAIN --------------------------
-def main():
-	image_converter()
+def fred_feed():
+	print("hi")
+	astra_camera(sys.argv)
+	#image_converter()
 
 	#arm.get_end_effector_pos()
 
-main()
+
+def astra_camera(args):
+	ic = image_converter()
+	rospy.init_node('image_converter', anonymous=True)
+	try:
+		rospy.spin()
+	except KeyboardInterrupt:
+		print("Shutting down")
+	cv2.destroyAllWindows()
+
+fred_feed()
