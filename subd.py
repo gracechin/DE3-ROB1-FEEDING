@@ -34,12 +34,11 @@ class image_converter:
 		image_sub = Subscriber("/camera/rgb/image_rect_color",Image)
 		depth_sub = Subscriber("/camera/depth_registered/image_raw", Image)
 
-		tss = message_filters.ApproximateTimeSynchronizer([image_sub, depth_sub],queue_size=10, slop=0.5)
-		# self.callback_d(image_sub,depth_sub)																		
-		tss.registerCallback(self.callback_d)
+		tss = message_filters.ApproximateTimeSynchronizer([image_sub, depth_sub],queue_size=10, slop=0.5)															
+		tss.registerCallback(self.callback)
 		print('init')
 
-	def callback_d(self,img,depth):
+	def callback(self,img,depth):
 
 		try:
 			depth_image_raw = self.bridge.imgmsg_to_cv2(depth, "passthrough")
@@ -101,14 +100,16 @@ class image_converter:
 		#   print(e)
 		# print(np.size(cv_image) , np.size(depth_image))
 
+
 def main(args):
-	ic = image_converter()
-	rospy.init_node('image_converter', anonymous=True)
-	try:
-		rospy.spin()
-	except KeyboardInterrupt:
-		print("Shutting down")
-	cv2.destroyAllWindows()
+		ic = image_converter()
+		rospy.init_node('image_converter', anonymous=True)
+		try:
+			rospy.spin()
+		except KeyboardInterrupt:
+			print("Shutting down")
+		cv2.destroyAllWindows()
 
 if __name__ == '__main__':
+	print("here")
 	main(sys.argv)
