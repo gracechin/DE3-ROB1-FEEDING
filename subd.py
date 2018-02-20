@@ -84,6 +84,7 @@ class image_converter:
 			cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
 			print (mouthxyz)
+			return (mouthxyz)
 
 		#print(depth_image_clone[mouth_center_x, mouth_center_y])
 
@@ -93,10 +94,11 @@ class image_converter:
 		cv2.imshow("Image window", cv_image)
 		cv2.waitKey(1)
 
-		try:
-		  self.image_pub.publish(String(mouthxyz))
-		except CvBridgeError as e:
-		  print(e)
+
+		# try:
+		#   self.image_pub.publish(String(mouthxyz))
+		# except CvBridgeError as e:
+		#   print(e)
 		# print(np.size(cv_image) , np.size(depth_image))
 
 def main(args):
