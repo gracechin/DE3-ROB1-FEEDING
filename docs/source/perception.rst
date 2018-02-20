@@ -19,3 +19,4 @@ By subscribing to two nodes of the camera through message filters, the depth gra
 * Image node: ``/camera/rgb/image_rect_color``
 * Depth node: ``/camera/depth_registered/image_raw``
 
+The mouth recognition is done through an OpenCV shap_predictor_68_face_landmarks.dat. The wideness of the mouth can also be determined and used.
