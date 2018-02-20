@@ -101,6 +101,7 @@ class image_converter:
 		#   print(e)
 		# print(np.size(cv_image) , np.size(depth_image))
 
+
 def main(args):
 	ic = image_converter()
 	rospy.init_node('image_converter', anonymous=True)
