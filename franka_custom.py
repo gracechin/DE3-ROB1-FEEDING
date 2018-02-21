@@ -5,7 +5,11 @@ This module uses ``subprocess`` and ``os``.
 
 import __future__
 from franka.franka_control import FrankaControl
+from astra import MouthPos
+import rospy
+from geometry_msgs.msg import Point
 import subprocess
+import sys
 import os
 
 
@@ -28,45 +32,72 @@ class FrankaCustom:
         return xyz_pos
 
     def get_mouth_pos(self):
-        uvw_pos = #get uvw_pos
-        print("Mouth position:", uvw_pos)
-        return uvw_pos
+        rospy.init_node("FredNode", anonymous=True)
+        mouth_sub = rospy.Subscriber("mouthxyz", Point, self.return_point)
+        rospy.wait_for_message("mouthxyz", Point)
+        return
+
+    def return_point(self, msg):
+        point = [msg.x, msg.y, msg.z]
+        print(point)
+        return point
+
 
     def calibrate(self):
         """Records several camera positions [u,v,w] & end effector positions [x,y,z]
         [u, v, w]*[A] = [x, y, z]
         Return matrix A
         """
-        uvw_list = ["camera position"]
-        xyz_list = ["end effector position"]
-        positions = {uvw_list:self.get_mouth_pos, xyz_list:self.get_end_effector_pos}
+        uvw_list = []
+        xyz_list = []
+        positions = {"camera pos":[uvw_list, self.get_mouth_pos]}
+        #end effector position":[xyz_list, self.get_end_effector_pos]}
+
         while True: 
             n = input("How many points would you like to calibrate with?: ")
-            if type(n)==True:
-                recording = True
+            try: 
+                n = int(n)
                 break
-            else:
+            except:
                 print("Please type an integer.")
-                recording = False
+                pass
 
-        while recording:
-            for pos in positions:
-                if (len(pos)<6):
-                    see = input("Would you like to see current "+pos[0]+" value? [Y/n]: ")
-                    if see == '' or see.lower() == 'y':
-                        new_pos = positions[pos]()
-                        record = input("Would you like to record this? [Y/n]: ")
-                        if record == '' or record.lower() == 'y':
-                            pos.append(new_pos)
-                        elif testing.lower() == 'n': pass
-                        else: print("Invalid response.")
-                    print("Testing mode: ", testing)
-                    elif see.lower() == 'n': pass
+       # while True:
+            # recording finished
+        if (len(uvw_list)==(n)):
+            print("You have finished recording your points.")
+            print("Camera coordinates :", uvw_list)
+            print("End effector coordinates :", xyz_list)
+
+        # recording points
+        for pos in positions:
+            if (len(positions[pos][0])<(n)):
+                see = raw_input("Would you like to see current "+pos+" value? [Y/n]: ")
+                print(see)
+                if (see == '' or see.lower() == 'y'):
+                    new_pos = positions[pos][1]()
+                    record = raw_input("Would you like to record this? [Y/n]: ")
+                    if (record == '' or record.lower() == 'y'):
+                        positions[pos][0].append(new_pos)
+                    elif (record.lower() == 'n'): pass
+                    elif (record.lower() == 'q'): sys.quit()
                     else: print("Invalid response.")
-                    print("Camera coordinates :", uvw_list)
-                    print("End effector coordinates :", uvw_list)
-                else:
-                    pass
+                elif (see.lower() == 'n'): pass
+                else: print("Invalid response.")
+                print("Camera coordinates :", uvw_list)
+                print("End effector coordinates :", xyz_list)
+            else:
+                pass
+    #return
+
+    def uvw_xyz_calibration(self):
+        """Finds the matrix A, such that ([u, v, w]')*[A] --> [x, y, z]'
+
+        Return matrix A
+        """
+
+        return
+
 
 '''
     while True:
@@ -107,19 +138,6 @@ class FrankaCustom:
 
         print("Command being called: ", command_str)
 '''
-        return
-
-
-
-
-    def uvw_xyz_calibration(self):
-        """Finds the matrix A, such that ([u, v, w]')*[A] --> [x, y, z]'
-
-        Return matrix A
-        """
-
-        return
-
 
 
 # def main():
