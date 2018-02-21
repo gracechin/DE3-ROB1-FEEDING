@@ -39,21 +39,18 @@ class FrankaControl:
             print("Working directory: ", self.path)
             print("Program: ", program)
             print("IP Address of robot: ", self.ip_address)
-            print("dx: ", dx)
-            print("dy: ", dy)
-            print("dz: ", dz)
             print("Command being called: ", command_str)
             print("Running FRANKA code...")
 
-        process = subprocess.Popen(command, stdout=subprocess.PIPE)
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         out, err = process.communicate()  # this will block until received
         decoded_output = out.decode("utf-8")
 
         import ast
         string_list = decoded_output.split("\n")
-
         converted_list = []
-        for idx, lit in enumerate(string_list):
+
+        for (idx, lit) in enumerate(string_list):
             x = lit
             x = ast.literal_eval(x)
             converted_list.append(x)
@@ -79,7 +76,7 @@ class FrankaControl:
             print("Command being called: ", command_str)
             print("Running FRANKA code...")
 
-        process = subprocess.Popen(command, stdout=subprocess.PIPE)
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         out, err = process.communicate()  # this will block until received
         decoded_output = out.decode("utf-8")
 

@@ -37,13 +37,13 @@ def record_data_pt(uvw_pt, xyz_pt):
 	xyz_pt.append(arm.get_end_effector_pos())
 
 
+
 ## MAIN --------------------------
 def fred_feed():
 	fred = FrankaCustom()
-	mouthxyz = fred.calibrate()
-
+	arm.get_end_effector_pos()
+	#mouthxyz = fred.calibrate()
 
 	#arm.get_end_effector_pos()
-
 
 fred_feed()
