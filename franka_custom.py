@@ -54,26 +54,32 @@ class FrankaCustom:
         Return matrix X
         """
 
-        # converting list to matrix
-        A = np.matrix(a)
-        B = np.matrix(b)
+        # converting list to appropriate matrices
+        A = np.array(a)
+        B = np.array(b)
 
         # applying python version of \ (mldivide(A, B)) in Matlab X = A\B --> A*X=B
-        num_vars = A.shape[1]
-        rank = np.linalg.matrix_rank(A)
-        if rank == num_vars:              
-            X = np.linalg.lstsq(A, B)[0]    # not under-determined
-        else:
-            for nz in combinations(range(num_vars), rank):    # the variables not set to zero
-                try: 
-                    X = np.zeros((num_vars, 1))  
-                    X[nz, :] = np.asarray(np.linalg.solve(A[:, nz], B))
-                    #print(X)
-                except np.linalg.LinAlgError:     
-                    pass                    # picked bad variables, can't solve
+        # num_vars = A.shape[1]
+        # X = np.linalg.lstsq(A, B)[0]
+        # a = np.linalg.inv(np.dot(X.T,X))
+        # c = np.dot(X.T,Y)
+        # b = np.dot(a,c)
+        X = np.polyfit(A,B,1)
+        # rank = np.linalg.matrix_rank(A)
+        # if rank == num_vars:              
+        #     X = np.linalg.lstsq(A, B)[0]    # not under-determined
+        # else:
+        #     for nz in combinations(range(num_vars), rank):    # the variables not set to zero
+        #         try: 
+        #             X = np.zeros((num_vars, 1))  
+        #             X[nz, :] = np.asarray(np.linalg.solve(A[:, nz], B))
+        #             #print(X)
+        #         except np.linalg.LinAlgError:     
+        #             pass                    # picked bad variables, can't solve
 
         # checking X
-        if (np.array_equal(A*X,B)):
+        print(A, B, X)
+        if (np.array_equal(A*X, B.T)):
             print("calibration factor (X) is found.")
             print("calibration completed.")
         else:
@@ -109,7 +115,7 @@ class FrankaCustom:
                 print("End effector coordinates :", xyz_list)
 
                 print("Applying linear regression...")
-                X = self.linear_regression(self, uvw_list, xyz_list)
+                X = self.linear_regression(uvw_list, xyz_list)
                 return X
 
             # recording points

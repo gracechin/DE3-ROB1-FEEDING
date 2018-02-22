@@ -12,7 +12,7 @@ if sys.version_info[:2] <= (2, 7):
     input = raw_input
 
 
-class FrankaControl:
+class FrankaControl(object):
     """Class containing methods to control an instance of the Franka Arm.
 
     Will print debug information to the console when ``debug_flag=True`` argument is used. Class
@@ -28,7 +28,8 @@ class FrankaControl:
     def get_joint_positions(self):
         """Gets current joint positions for Franka Arm.
 
-        Longer msg here/
+        This will return a list of lists of joint position data. This data structure has not been
+        documented yet and is not recommended for use.
         """
 
         program = './print_joint_positions'  # set executable to be used
@@ -42,15 +43,15 @@ class FrankaControl:
             print("Command being called: ", command_str)
             print("Running FRANKA code...")
 
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        process = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE)
         out, err = process.communicate()  # this will block until received
         decoded_output = out.decode("utf-8")
 
         import ast
         string_list = decoded_output.split("\n")
-        converted_list = []
 
-        for (idx, lit) in enumerate(string_list):
+        converted_list = []
+        for idx, lit in enumerate(string_list):
             x = lit
             x = ast.literal_eval(x)
             converted_list.append(x)
@@ -76,7 +77,7 @@ class FrankaControl:
             print("Command being called: ", command_str)
             print("Running FRANKA code...")
 
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        process = subprocess.Popen(command, cwd=self.path, stdout=subprocess.PIPE)
         out, err = process.communicate()  # this will block until received
         decoded_output = out.decode("utf-8")
 
