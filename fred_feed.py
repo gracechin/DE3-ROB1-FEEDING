@@ -9,6 +9,7 @@ import numpy as np
 
 # initiating FrankaControl
 arm = FrankaControl(debug_flag=True) 
+fred = FrankaCustom()
 
 # franka status
 
@@ -40,10 +41,8 @@ def record_data_pt(uvw_pt, xyz_pt):
 
 ## MAIN --------------------------
 def fred_feed():
-	fred = FrankaCustom()
-	arm.get_end_effector_pos()
-	#mouthxyz = fred.calibrate()
+	fred.calibrate()
+	#fred.linear_regression([248.,248.,226.], [0.188, -0.308, 0.488])
 
-	#arm.get_end_effector_pos()
 
 fred_feed()
