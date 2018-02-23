@@ -41,8 +41,8 @@ def record_data_pt(uvw_pt, xyz_pt):
 
 ## MAIN --------------------------
 def fred_feed():
-	fred.calibrate()
-	#fred.linear_regression([248.,248.,226.], [0.188, -0.308, 0.488])
+	#fred.calibrate()
+	fred.linear_regression([[255.0, 243.0, 0.0], [255.0, 248.0, 0.0]], [[0.188, -0.308, 0.488], [0.188, -0.308, 0.488]])
 
 
 fred_feed()

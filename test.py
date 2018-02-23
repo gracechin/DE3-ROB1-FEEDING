@@ -1,33 +1,33 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Random data
-N = [[255.0, 243.0, 0.0], [255.0, 248.0, 0.0]]
-M = [[0.188, -0.308, 0.488], [0.188, -0.308, 0.488]]
-#input = np.random.random((N,M))
-# print input 
+A = np.array([[255.0, 243.0, 0.0], [255.0, 248.0, 0.0]])
+B = np.array([[0.188, -0.308, 0.488], [0.188, -0.308, 0.488]])
 
-# Setup matrices
-m = np.shape(N)[0]
-X = np.matrix(np.hstack((np.ones((m,1)), N))).T
-Y = np.matrix(M).T
-print("X: ", X, "Y: ", Y)
+print("A", A)
+print("B", B)
 
-# Solve for projection matrix
-print X.T.dot(X)
-# print dot(X.T).dot(Y)
-# p_mat = np.linalg.inv( X.T.dot(X) ).dot(X.T).dot(Y)
-p_mat = np.array(np.linalg.inv( X.T.dot(X) ))
+m_list = [] # m for x, y, z
+c_list = [] # c for x, y, z
 
-print "pmat: ", p_mat
-print("M1", p_mat[0][0]+p_mat[0][1]*N[0][0])
+for dimension in range(3):
+	a = []
+	b = []
+	for point_index in range(len(A)):
+		a.append(A[point_index][dimension])
+		b.append(B[point_index][dimension])
+	np.array(a)
+	np.array(b)
+	a = np.vstack([a, np.ones(len(a))]).T
+	m, c = np.linalg.lstsq(a, b)[0]
+	m_list.append(m)
+	c_list.append(c)
+scale=[m_list, c_list]
+print(scale)
 
-# Find regression line
-# xx = np.linspace(0, 1, 2)
-# yy = np.array(p_mat[0] + p_mat[1] * xx)
+input_pt = A[0]
+output_pt = []
+for di in range(3):
+	output_pt.append(input_pt[di]*m_list[di]+c_list[di])
 
-# # Plot data, regression line
-# plt.figure(1)
-# plt.plot(xx, yy.T, color='b')
-# plt.scatter(input[:,0], input[:,1], color='r')
-# plt.show()
+print(output_pt)
