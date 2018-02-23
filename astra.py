@@ -60,7 +60,6 @@ class MouthPos:
 			mouth_center_y = mouth_bottom[1] +(mouth_top[1]-mouth_bottom[1])/2
 			mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
 			mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
-			print(mouthxyz)
 
 			msg = Point()
 			msg.x = mouth_center_x

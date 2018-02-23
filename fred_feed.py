@@ -37,12 +37,17 @@ def record_data_pt(uvw_pt, xyz_pt):
 	uvw_pt.append(mouth_node_sub(return_uvw))
 	xyz_pt.append(arm.get_end_effector_pos())
 
-
-
 ## MAIN --------------------------
 def fred_feed():
-	#fred.calibrate()
-	fred.linear_regression([[255.0, 243.0, 0.0], [255.0, 248.0, 0.0]], [[0.188, -0.308, 0.488], [0.188, -0.308, 0.488]])
+	scale = fred.calibrate()
+
+	camera_point = fred.get_mouth_pos()
+	see = raw_input("Would you like to record camera value? [Y/n]: ")
+	if (see == '' or see.lower() == 'y'):
+    	camera_point = fred.get_mouth_pos()
+
+
+    else: sys.quit()
 
 
 fred_feed()

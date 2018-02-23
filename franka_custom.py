@@ -10,6 +10,7 @@ import rospy
 from geometry_msgs.msg import Point
 from franka.franka_control import FrankaControl
 from astra import MouthPos
+import math
 import numpy as np
 from itertools import combinations
 
@@ -71,22 +72,30 @@ class FrankaCustom:
             m_list.append(m)
             c_list.append(c)
             scale=[m_list, c_list]
+
+        #print("set1", set1)
+        #print("set2", set2)
+        print("Scale found!")
+        print("m list : ", m_list)
+        print("c list : ", c_list)
         return scale
 
-    def convert_pt(self, input_pts, scale):
+    def convert_pt(self, input_pt, scale):
         ''' Converts input_pts using provided scale. 
         input_pts : list containing x, y, z
         scale : list containting m_list and c_list
         Returns output_pt'''
+
         output_pt = []
         m_list=scale[0]
         c_list=scale[1]
-        for point in range(len(input_pts)):
-            out = []
-            for di in range(3):
-                output_pt.append(input_pts[point][di]*m_list[di]+c_list[di])
-            output_pt.append(out)
-        return ouput_pt
+
+        for di in range(3):
+            new_value = input_pt[di]*m_list[di]+c_list[di]
+            round_v = math.ceil(new_value * 1000.0) / 1000.0
+            output_pt.append(round_v)
+
+        return output_pt
 
 
     def calibrate(self):
@@ -115,8 +124,9 @@ class FrankaCustom:
                 print("End effector coordinates :", xyz_list)
 
                 print("Applying linear regression...")
-                m_list, c_list = self.linear_regression(uvw_list, xyz_list)
-                return X
+                scale = self.linear_regression(uvw_list, xyz_list)
+                print("----- Calibration finished -----")
+                return scale
 
             # recording points
             for pos in positions:
