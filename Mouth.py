@@ -8,6 +8,7 @@ import sys
 import rospy
 import cv2
 from std_msgs.msg import String
+from geometry_msgs.msg import Point
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from imutils import face_utils
@@ -18,19 +19,18 @@ import dlib
 import cv2
 
 #dont forget to $ roscore and  $ roslaunch openni2_launch openni2.launch
-#https://answers.ros.org/question/219029/getting-depth-information-from-point-using-python/ FOR MULTPLE INPUTS
-
+# this code outputs 3 topics: xyz of mouth (pixels) , mouth status and face status
 # locate the predictors and detectors
 predictor_path = "/home/robin/DE3-ROB1-FEEDING/perception/shape_predictor_68_face_landmarks.dat"
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 
 
-class image_converter:
+class Mouth:
 
 	def __init__(self):
 
-		self.face_pub = rospy.Publisher("/face", String, queue_size=10)
+		self.face_status_pub = rospy.Publisher("/face_status", String, queue_size=10)
 		self.mouth_xyz_pub = rospy.Publisher("/mouth_xyz", Point, queue_size=10)
 		self.mouth_status_pub = rospy.Publisher("/mouth_status", String, queue_size=10)
 
@@ -55,7 +55,6 @@ class image_converter:
 		except CvBridgeError as e:
 			print(e)
 
-
 		#resizing image speeds it up! cloning to make changes without changing perception
 		cv_image = imutils.resize(cv_image, width=500)
 		depth_image = imutils.resize(depth_image, width=500)
@@ -64,14 +63,17 @@ class image_converter:
 
 		#converting the image to grayscale 
 		gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-		
 		# detect faces
 		rects = detector(gray, 1)
-		
+		# establish if any faces present 
 		if rects != None:
-			face = 1
+			face_status = 'present'
 		else: 
-			face = 0
+			face_status = 'absent'
+
+		print(face_status)
+
+		self.face_status_pub.publish(face_status)
 
 		# #are picture frames different size? both are 480,640 
 		# # print(depth_image_clone.shape)
@@ -112,7 +114,13 @@ class image_converter:
 			cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 0), 5)
 
 		 	print ("mouth %s x, y, z = " %(i) ,mouthxyz, 'status = ', mouth_status)
-		# 	return (mouthxyz)
+		 	xyz = Point()
+			xyz.x = mouth_center_x
+			xyz.y = mouth_center_y
+			xyz.z = mouth_center_z
+			self.mouth_xyz_pub.publish(xyz)
+			
+			self.mouth_status_pub.publish(mouth_status)
 
 		# print(depth_image_clone[mouth_center_x, mouth_center_y])
 
@@ -122,12 +130,7 @@ class image_converter:
 		cv2.imshow("Image window", cv_image_clone)
 		cv2.waitKey(1)
 
-		xyz = Point()
-		xyz.x = mouth_center_x
-		xyz.y = mouth_center_y
-		xyz.z = mouth_center_z
-		self.mouth_xyz_pub.publish(xyz)
-		self.mouth_xyz_pub.publish(xyz)
+		
 
 		# try:
 		#   self.image_pub.publish(String(mouthxyz))
@@ -138,8 +141,8 @@ class image_converter:
 
 
 def main(args):
-		ic = image_converter()
-		rospy.init_node('image_converter', anonymous=True)
+		ic = Mouth()
+		rospy.init_node('Mouth', anonymous=True)
 		try:
 			rospy.spin()
 		except KeyboardInterrupt:
