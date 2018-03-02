@@ -37,12 +37,9 @@ def record_data_pt(uvw_pt, xyz_pt):
 	uvw_pt.append(mouth_node_sub(return_uvw))
 	xyz_pt.append(arm.get_end_effector_pos())
 
-
-
 ## MAIN --------------------------
 def fred_feed():
-	fred.calibrate()
-	#fred.linear_regression([248.,248.,226.], [0.188, -0.308, 0.488])
-
+	scale = fred.calibrate()
+	print("Yay!", scale)
 
 fred_feed()

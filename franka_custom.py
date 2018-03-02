@@ -10,6 +10,7 @@ import rospy
 from geometry_msgs.msg import Point
 from franka.franka_control import FrankaControl
 from astra import MouthPos
+import math
 import numpy as np
 from itertools import combinations
 
@@ -48,45 +49,53 @@ class FrankaCustom:
         mouth_sub.unregister()
         return
 
-    def linear_regression(self, a, b):
-        """Finds the matrix X, such that A*X = B
-            Adapted from: https://stackoverflow.com/questions/33559946/numpy-vs-mldivide-matlab-operator
-        Return matrix X
-        """
+    def linear_regression(self, set1, set2):
+        ''' Finds the relationship between two sets of points (y=mx+c)
+        Inputs two lists: input list (set1) and output list (set2)
+        Returns list of m and c.'''
+        A = np.array(set1)
+        B = np.array(set2)
 
-        # converting list to appropriate matrices
-        A = np.array(a)
-        B = np.array(b)
+        m_list = [] # m for x, y, z
+        c_list = [] # c for x, y, z
 
-        # applying python version of \ (mldivide(A, B)) in Matlab X = A\B --> A*X=B
-        # num_vars = A.shape[1]
-        # X = np.linalg.lstsq(A, B)[0]
-        # a = np.linalg.inv(np.dot(X.T,X))
-        # c = np.dot(X.T,Y)
-        # b = np.dot(a,c)
-        X = np.polyfit(A,B,1)
-        # rank = np.linalg.matrix_rank(A)
-        # if rank == num_vars:              
-        #     X = np.linalg.lstsq(A, B)[0]    # not under-determined
-        # else:
-        #     for nz in combinations(range(num_vars), rank):    # the variables not set to zero
-        #         try: 
-        #             X = np.zeros((num_vars, 1))  
-        #             X[nz, :] = np.asarray(np.linalg.solve(A[:, nz], B))
-        #             #print(X)
-        #         except np.linalg.LinAlgError:     
-        #             pass                    # picked bad variables, can't solve
+        for dimension in range(3):
+            a = []
+            b = []
+            for point_index in range(len(A)):
+                a.append(A[point_index][dimension])
+                b.append(B[point_index][dimension])
+            np.array(a)
+            np.array(b)
+            a = np.vstack([a, np.ones(len(a))]).T
+            m, c = np.linalg.lstsq(a, b)[0]
+            m_list.append(m)
+            c_list.append(c)
+            scale=[m_list, c_list]
 
-        # checking X
-        print(A, B, X)
-        if (np.array_equal(A*X, B.T)):
-            print("calibration factor (X) is found.")
-            print("calibration completed.")
-        else:
-            print("calibration error!")
-            print("A:", A, "B:", B, "X:", X)
+        #print("set1", set1)
+        #print("set2", set2)
+        print("Scale found!")
+        print("m list : ", m_list)
+        print("c list : ", c_list)
+        return scale
 
-        return X
+    def convert_pt(self, input_pt, scale):
+        ''' Converts input_pts using provided scale. 
+        input_pts : list containing x, y, z
+        scale : list containting m_list and c_list
+        Returns output_pt'''
+
+        output_pt = []
+        m_list=scale[0]
+        c_list=scale[1]
+
+        for di in range(3):
+            new_value = input_pt[di]*m_list[di]+c_list[di]
+            round_v = math.ceil(new_value * 1000.0) / 1000.0
+            output_pt.append(round_v)
+
+        return output_pt
 
 
     def calibrate(self):
@@ -115,8 +124,26 @@ class FrankaCustom:
                 print("End effector coordinates :", xyz_list)
 
                 print("Applying linear regression...")
-                X = self.linear_regression(uvw_list, xyz_list)
-                return X
+                scale = self.linear_regression(uvw_list, xyz_list)
+                print("----- Calibration finished -----")
+
+                while True:
+                    camera_point = fred.get_mouth_pos()
+                    go = raw_input("Would you like to go to that camera point? [Y/n]: ")
+                    print(go)
+                    if (go == '' or go.lower() == 'y'):
+                        end = fred.convert_pt(camera_point, scale)
+                        end = [str(i) for i in end]
+                        start = fred.get_end_effector_pos()
+                        print('start:', start)
+                        print('end:', end)
+                        certain = raw_input("You certain? [Y/n]: ")
+                        if (certain == '' or certain.lower() == 'y'):
+                            arm.move_absolute(end)
+                        else: pass
+                    else: pass
+                
+                return scale
 
             # recording points
             for pos in positions:
