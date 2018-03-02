@@ -16,6 +16,7 @@ import argparse
 import imutils
 import dlib
 import cv2
+from scipy.spatial import distance as dist
 
 #dont forget to $ roscore and  $ roslaunch openni2_launch openni2.launch
 #https://answers.ros.org/question/219029/getting-depth-information-from-point-using-python/ FOR MULTPLE INPUTS
@@ -75,11 +76,13 @@ class image_converter:
 			features = face_utils.FACIAL_LANDMARKS_IDXS.items()
 			mouth = features[0]
 			points = shape[mouth[1][0]:mouth[1][1]]
+			
 			# print mouth points:
 			# for (x,y) in points:
 			#   cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)
 
-			# inside_points = shape[60:68]
+			# mouth_inside_points = shape[60:68]
+
 			mouth_top = shape[62]
 			mouth_bottom = shape[66]
 			mouth_left = shape[61]
@@ -93,9 +96,54 @@ class image_converter:
 			if mouth_ratio > 0: 
 				mouth_status = 'open'
 			else: 
-				mouth_status = 'closed'
-			
+				mouth_status = 'closed' 
 
+			eye_points = shape[37:48]
+			right_eye_top = shape[44]
+			right_eye_bottom = shape[48]
+			right_eye_left = shape[43]
+			right_eye_right = shape[46]
+
+			# open close right eye ratio
+			right_eye_ratio = float(abs(right_eye_top[1]- right_eye_bottom[1])/(abs(right_eye_left[0] - right_eye_right[0])))
+			
+			### eye numbers wrong 
+			left_eye_top = shape[39]
+			left_eye_bottom = shape[41]
+			left_eye_left = shape[37]
+			left_eye_right = shape[40]
+
+			# open close left eye ratio
+			AL = dist.euclidean(shape[38], shape[42])
+			BL = dist.euclidean(shape[39], shape[41])
+			# compute the euclidean distance between the horizontal
+			# eye landmark (x, y)-coordinates
+			CL = dist.euclidean(shape[37], shape[40])
+			# compute the eye aspect ratio
+			earL = (AL + BL) / (2.0 * CL)
+
+			# open close left eye ratio
+			AR = dist.euclidean(shape[44], shape[48])
+			BR = dist.euclidean(shape[45], shape[47])
+			# compute the euclidean distance between the horizontal
+			# eye landmark (x, y)-coordinates
+			CR = dist.euclidean(shape[43], shape[46])
+			# compute the eye aspect ratio
+			earR = (AR + BR) / ( 4*CR)
+			print (earR)
+ 
+			# left_eye_ratio = abs(float(left_eye_top[1])- float(left_eye_bottom[1]))/(2*abs(float(left_eye_left[0]) - float(left_eye_right[0])))
+			# right_eye_ratio = abs(float(right_eye_top[1])- float(right_eye_bottom[1]))/(2*abs(float(right_eye_left[0]) - float(right_eye_right[0])))
+			
+			if (earR  and earL)< 0.3: 
+				eye_status = 'closed'
+			else: 
+				eye_status = 'open'
+			count = 37
+			for (x,y) in eye_points:
+				cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)
+				cv2.putText(cv_image, str(count) , (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+				count += 1
 			#cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
 			# mouth center: 
@@ -103,7 +151,9 @@ class image_converter:
 			mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
 			cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 0), 5)
 
-		 	print ("mouth %s x, y, z = " %(i) ,mouthxyz, 'status = ', mouth_status)
+		 	# print ("mouth %s x, y, z = " %(i) ,mouthxyz, 'status = ', mouth_status)
+		 	# print (left_eye_ratio)
+		 	print ("eyes %s " %(i) , 'status = ', eye_status)
 		# 	return (mouthxyz)
 
 		# print(depth_image_clone[mouth_center_x, mouth_center_y])
