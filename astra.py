@@ -54,18 +54,28 @@ class MouthPos:
 			features = face_utils.FACIAL_LANDMARKS_IDXS.items()
 
 			# working out mouth positions
+			mouth_center_z = 0
 			mouth_top = shape[62]
 			mouth_bottom = shape[66]
 			mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2
 			mouth_center_y = mouth_bottom[1] +(mouth_top[1]-mouth_bottom[1])/2
-			mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
+			try:
+				mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
+			except:
+				pass
+			cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 			mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
 
 			msg = Point()
 			msg.x = mouth_center_x
 			msg.y = mouth_center_y
 			msg.z = mouth_center_z
+			print(mouthxyz)
 			self.image_pub.publish(msg)
+
+		cv2.imshow("Depth window", depth_image_clone)
+		cv2.imshow("Image window", cv_image)
+		cv2.waitKey(1)
 
 if __name__ == '__main__':
 	MouthPos()

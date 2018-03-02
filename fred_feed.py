@@ -39,29 +39,7 @@ def record_data_pt(uvw_pt, xyz_pt):
 
 ## MAIN --------------------------
 def fred_feed():
-	test = False
 	scale = fred.calibrate()
-	test = True
-
-	while test:
-		camera_point = fred.get_mouth_pos()
-		print("camera_point:", camera_point)
-		go = raw_input("Would you like to go to that camera point? [Y/n]: ")
-		print(go)
-            if (go == '' or go.lower() == 'y'):
-                end = fred.convert_pt(camera_point)
-                start = fred.get_end_effector_pos
-                print('start:', start)
-                print('end:', end)
-                certain = raw_input("You certain? [Y/n]: ")
-                if (certain == '' or certain.lower() == 'y'):
-                	arm.move_absolute[end]
-                else: pass
-            elif (record.lower() == 'n'): pass
-            elif (record.lower() == 'q'): sys.quit()
-            else: print("Invalid response.")
-
-    else: sys.quit()
-
+	print("Yay!", scale)
 
 fred_feed()
