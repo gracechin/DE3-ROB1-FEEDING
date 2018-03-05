@@ -127,22 +127,19 @@ class FrankaCustom:
                 scale = self.linear_regression(uvw_list, xyz_list)
                 print("----- Calibration finished -----")
 
-                while True:
-                    camera_point = fred.get_mouth_pos()
-                    go = raw_input("Would you like to go to that camera point? [Y/n]: ")
-                    print(go)
-                    if (go == '' or go.lower() == 'y'):
-                        end = fred.convert_pt(camera_point, scale)
-                        end = [str(i) for i in end]
-                        start = fred.get_end_effector_pos()
-                        print('start:', start)
-                        print('end:', end)
-                        certain = raw_input("You certain? [Y/n]: ")
-                        if (certain == '' or certain.lower() == 'y'):
-                            arm.move_absolute(end)
-                        else: pass
-                    else: pass
-                
+               	camera_point = self.get_mouth_pos() 
+                go = raw_input("Would you like to go to that camera point? [Y/n]: ")
+                print(go)
+                if (go == '' or go.lower() == 'y'):
+                	end = self.convert_pt(camera_point, scale)
+                	end = [str(i) for i in end]
+                	start = self.get_end_effector_pos()
+                	print('start:', start)
+                	print('end:', end)
+                	certain = raw_input("You certain? [Y/n]: ")
+                	if (certain == '' or certain.lower() == 'y'):
+                		arm.move_absolute(end)
+
                 return scale
 
             # recording points

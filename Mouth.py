@@ -109,7 +109,10 @@ class Mouth:
 			#cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
 			# mouth center: 
-			mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
+			try:
+				mouth_center_z = depth_image[mouth_center_x, mouth_center_y]
+			except:
+				mouth_center_z = 0
 			mouthxyz = str(mouth_center_x) + " " +str(mouth_center_y) + " " +str(mouth_center_z)
 			cv2.circle(depth_image_clone, (mouth_center_x, mouth_center_y), 1, (255, 0, 0), 5)
 
