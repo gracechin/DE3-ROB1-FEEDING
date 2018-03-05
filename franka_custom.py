@@ -132,11 +132,10 @@ class FrankaCustom:
                     go = raw_input("Would you like to go to that camera point? [Y/n]: ")
                     print(go)
                     if (go == '' or go.lower() == 'y'):
-                        end = fred.convert_pt(camera_point, scale)
-                        end = [str(i) for i in end]
+                        end = str(fred.convert_pt(camera_point, scale))
                         start = fred.get_end_effector_pos()
                         print('start:', start)
-                        print('end:', end)
+                        print('end:' + end)
                         certain = raw_input("You certain? [Y/n]: ")
                         if (certain == '' or certain.lower() == 'y'):
                             arm.move_absolute(end)
