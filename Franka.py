@@ -9,7 +9,7 @@ import __future__
 import rospy
 from geometry_msgs.msg import Point
 from franka.franka_control import FrankaControl
-from astra import MouthPos
+from Mouth import Mouth
 import math
 import numpy as np
 from itertools import combinations
@@ -29,7 +29,7 @@ class FrankaCustom:
         self.ip_address = ip
         self.debug = debug_flag
         self.path = os.path.dirname(os.path.realpath(__file__))  # gets working dir of this file
-
+        
     def get_end_effector_pos(self):
         xyz_pos = arm.get_end_effector_pos()
         print("End effector position:", xyz_pos) 
@@ -38,8 +38,8 @@ class FrankaCustom:
     def get_mouth_pos(self):
         rospy.init_node("FredNode", anonymous=True)
         global mouth_sub
-        mouth_sub = rospy.Subscriber("mouthxyz", Point, self.return_point)
-        rospy.wait_for_message("mouthxyz", Point)
+        mouth_sub = rospy.Subscriber("/mouth_xyz", Point, self.return_point)
+        rospy.wait_for_message("/mouth_xyz", Point)
         return point
 
     def return_point(self, msg):
@@ -127,22 +127,19 @@ class FrankaCustom:
                 scale = self.linear_regression(uvw_list, xyz_list)
                 print("----- Calibration finished -----")
 
-                while True:
-                    camera_point = fred.get_mouth_pos()
-                    go = raw_input("Would you like to go to that camera point? [Y/n]: ")
-                    print(go)
-                    if (go == '' or go.lower() == 'y'):
-                        end = fred.convert_pt(camera_point, scale)
-                        end = [str(i) for i in end]
-                        start = fred.get_end_effector_pos()
-                        print('start:', start)
-                        print('end:', end)
-                        certain = raw_input("You certain? [Y/n]: ")
-                        if (certain == '' or certain.lower() == 'y'):
-                            arm.move_absolute(end)
-                        else: pass
-                    else: pass
-                
+               	camera_point = self.get_mouth_pos() 
+                go = raw_input("Would you like to go to that camera point? [Y/n]: ")
+                print(go)
+                if (go == '' or go.lower() == 'y'):
+                	end = self.convert_pt(camera_point, scale)
+                	end = [str(i) for i in end]
+                	start = self.get_end_effector_pos()
+                	print('start:', start)
+                	print('end:', end)
+                	certain = raw_input("You certain? [Y/n]: ")
+                	if (certain == '' or certain.lower() == 'y'):
+                		arm.move_absolute(end)
+
                 return scale
 
             # recording points
