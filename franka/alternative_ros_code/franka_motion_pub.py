@@ -44,10 +44,11 @@ if __name__ == '__main__':
         
         motion_plan = []
         resolution = 100
-        for i in range(1, resolution):         
+        for i in range(1, resolution):
+            print(i, resolution)
             motion_plan.append((0.4+i/resolution, 0.4+i/resolution, 0.4+i/resolution, 0.100))
 
-        # print(motion_plan)
+        print(motion_plan)
         for x, y, z, speed in motion_plan: 
             franka_move_to(x, y, z, speed)
             time.sleep(0.1)  # 10 Hz control loop

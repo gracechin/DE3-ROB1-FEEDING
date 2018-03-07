@@ -132,20 +132,19 @@ class FrankaCustom:
                 print("----- Calibration finished -----")
 
                 print("----- Start Testing -----")
-                see = raw_input("Would you like record current camera point? [Y/n]: ")
+                see = raw_input("Would you like to record current camera point? [Y/n]: ")
                 if (see == '' or see.lower() == 'y'):
                     camera_point = self.get_mouth_pos() 
                     go = raw_input("Would you like to go to that camera point? [Y/n]: ")
                     print(go)
                     if (go == '' or go.lower() == 'y'):
                         end = self.convert_pt(camera_point, scale)
-                    	end = [str(i) for i in end]
                         start = self.get_end_effector_pos()
                         print('start:', start)
                         print('end:', end)
                         certain = raw_input("You certain? [Y/n]: ")
                         if (certain == '' or certain.lower() == 'y'):
-                            arm.move_absolute(end)
+                            arm_ros.move_to(end[0], end[1], end[2], 0.1)
 
                 return scale
 
