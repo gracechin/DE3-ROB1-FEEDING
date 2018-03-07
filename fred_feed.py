@@ -1,14 +1,19 @@
 import subprocess
 from std_msgs.msg import String
 from Franka import FrankaCustom
-from franka.franka_control import FrankaControl
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Importing Chess team - Ben Greenberg's classes
+from franka.franka_control import FrankaControl
+from franka.franka_control_ros import FrankaRos
 
 
 # initiating FrankaControl
 arm = FrankaControl(debug_flag=True) 
+arm_ros = FrankaRos()
 fred = FrankaCustom()
+
 
 # franka status
 
@@ -38,24 +43,29 @@ def record_data_pt(uvw_pt, xyz_pt):
 
 ## MAIN --------------------------
 def fred_feed():
-	scale = [[0.0015370193568726351, -0.058249999999999871, 9.3565241303452144e-05], [-0.45684233493064297, 10.913749999999977, 0.32972927265227553]]
-	camera_point = fred.get_mouth_pos()
-	go = raw_input("Would you like to go to that camera point? [Y/n]: ")
-	print(go)
-	if (go == '' or go.lower() == 'y'):
-		end = fred.convert_pt(camera_point, scale)
-		end = [str(i) for i in end]
-		start = fred.get_end_effector_pos()
-		print('start:', start)
-		print('end:', end)
-		certain = raw_input("You certain? [Y/n]: ")
-		if (certain == '' or certain.lower() == 'y'):
-			arm.move_absolute(end)
-	fred.get_end_effector_pos()
+	# camera_point = fred.get_mouth_pos() 
+	# m = [0.0014412346027600322, -0.0064285714285713625, 6.829108391583492e-07]
+	# c = [-0.17613191331662731, 0.590942857142845, 0.34574058675699332]
+	# scale = [m, c]
+	# go = raw_input("Would you like to go to that camera point? [Y/n]: ")
+	# print(go)
+	# if (go == '' or go.lower() == 'y'):
+	# 	end = fred.convert_pt(camera_point, scale)
+	# 	end = [str(i) for i in end]
+	# 	start = fred.get_end_effector_pos()
+	# 	print('start:', start)
+	# 	print('end:', end)
+	# 	certain = raw_input("You certain? [Y/n]: ")
+	# 	if (certain == '' or certain.lower() == 'y'):
+	# 		arm.move_absolute(end)
+	# fred.get_end_effector_pos()
+
+	arm_ros.example_movement()
+
 	# arm.move_absolute(['0.162', '0.192', '0.658'])
 	# arm.move_relative('0.0', '0.1', '0.0')
 	# fred.get_end_effector_pos()
-	# scale = fred.calibrate()
-	print("Yay!", scale)
+	# scale = fred.manual_calibrate()
+	# print("Yay!", scale)
 
 fred_feed()

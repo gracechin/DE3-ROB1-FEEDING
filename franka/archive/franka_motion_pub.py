@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-
-
 import rospy
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import MultiArrayDimension
@@ -21,12 +19,13 @@ target_coords.layout.dim[1].size = 1
 def franka_move_to(x, y, z, speed):
     # rate = rospy.Rate(10) # 10hz
     # target_coords
-    target_coords.data = [x, y, z, speed]  # [0.1, 0.1, 0.1, 0.10] units = m/s
+    target_coords.data = [x, y, z, speed]  # [0.1, 0.1, 0.1, 0.10]
 
     rospy.loginfo("franka_move_to: " + str(target_coords.data))
     # print(target_coords)
     pub.publish(target_coords)
     # rate.sleep()
+
 
 if __name__ == '__main__':
     try:
