@@ -1,3 +1,5 @@
+#
+# Benedict Greenberg, March 2018
 """Python Module to control the Franka Arm though simple method calls.
 
 This module uses ``subprocess`` and ``os``.
@@ -7,6 +9,7 @@ import subprocess
 import os
 import sys
 import argparse
+import numpy as np
 
 if sys.version_info[:2] <= (2, 7):
     input = raw_input
@@ -142,6 +145,14 @@ class FrankaControl(object):
             raise ValueError("Invalid coordinates. There can only be three dimensions.")
         x, y, z = coordinates[0], coordinates[1], coordinates[2]
 
+        try:
+            x, y, z = float(x), float(y), float(z)
+        except ValueError:
+            print("Arguments are invalid: must be floats")
+            return
+
+        x, y, z = str(x), str(y), str(z)
+
         # TODO: implement safety check for target coordinates
 
         program = './franka_move_to_absolute'
@@ -243,6 +254,8 @@ def test_joints():
         print(
             "%8.6f   %8.6f   %1.0f   %1.0f   %8.6f   %8.6f   %1.0f   %1.0f   %1.0f   %1.0f   "
             "%1.0f   %1.0f   %1.0f   %1.0f   %5.3f   %1.0f" % tuple(matrix[0]))
+        data = np.array(matrix)
+        print(data)
 
 
 def test_position():
