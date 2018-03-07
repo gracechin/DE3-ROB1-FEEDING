@@ -11,8 +11,8 @@ from franka.franka_control_ros import FrankaRos
 
 # initiating FrankaControl
 arm = FrankaControl(debug_flag=True) 
-arm_ros = FrankaRos()
-fred = FrankaCustom()
+arm_ros = FrankaRos(debug=True)
+fred = FrankaCustom(d)
 
 
 # franka status
@@ -59,13 +59,8 @@ def fred_feed():
 	# 	if (certain == '' or certain.lower() == 'y'):
 	# 		arm.move_absolute(end)
 	# fred.get_end_effector_pos()
-
+	arm_ros.get_joint_positions()
 	arm_ros.example_movement()
 
-	# arm.move_absolute(['0.162', '0.192', '0.658'])
-	# arm.move_relative('0.0', '0.1', '0.0')
-	# fred.get_end_effector_pos()
-	# scale = fred.manual_calibrate()
-	# print("Yay!", scale)
 
 fred_feed()
