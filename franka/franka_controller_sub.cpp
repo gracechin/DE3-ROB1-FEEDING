@@ -265,7 +265,7 @@ int main(int argc, char** argv) {
 
 
 
-      // stopping the motino properly
+      // // stopping the motino properly
       // if (vel_norm < 0.001) {
       //   // stop program when target reached
       //   std::cout << std::endl << "Finished motion, shutting down..." << std::endl << std::flush;

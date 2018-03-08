@@ -2,14 +2,15 @@
 
 This module uses ``subprocess`` and ``os``.
 """
+import __future__
 import os
 import sys
 import subprocess
-import __future__
 import rospy
 from geometry_msgs.msg import Point
 from Mouth import Mouth
 import math
+import time
 import numpy as np
 from itertools import combinations
 
@@ -17,11 +18,35 @@ from itertools import combinations
 from franka.franka_control import FrankaControl
 from franka.franka_control_ros import FrankaRos
 
-global arm 
-arm = FrankaControl()
-arm_ros = FrankaRos()
 
-class FrankaCustom:
+
+
+class Control:
+    def __init__(self, ip='192.168.0.88', debug_flag=False):
+        self.ip_address = ip
+        self.debug = debug_flag
+        self.arm_ros = FrankaRos()
+        self.arm = FrankaControl()
+        self.path = os.path.dirname(os.path.realpath(__file__))  # gets working dir of this file
+
+    def move_to(self, x, y, z, speed):
+        '''Creates motion plan to go to target coordinate and executes motion plan
+        Taken from franka_motion_pub.py'''
+
+        motion_plan = []
+        resolution = 100
+        for i in range(1, resolution):
+            print(i, resolution)
+            motion_plan.append((x+i/resolution, y+i/resolution, z+i/resolution, speed))
+
+        print(motion_plan)
+        for x, y, z, speed in motion_plan: 
+            self.arm_ros.move_to(x, y, z, speed)
+            time.sleep(0.1)  # 10 Hz control loop
+
+
+
+class Calibrate:
     """Class containing methods to control an instance of the Franka Arm.
 
     Will print debug information to the console when ``debug_flag=True`` argument is used. Class
@@ -32,10 +57,12 @@ class FrankaCustom:
     def __init__(self, ip='192.168.0.88', debug_flag=False):
         self.ip_address = ip
         self.debug = debug_flag
+        self.arm_ros = FrankaRos()
+        self.arm = FrankaControl()
         self.path = os.path.dirname(os.path.realpath(__file__))  # gets working dir of this file
         
     def get_end_effector_pos(self):
-        xyz_pos = arm.get_end_effector_pos()
+        xyz_pos = self.arm.get_end_effector_pos()
         print("End effector position:", xyz_pos) 
         return xyz_pos
 
@@ -144,8 +171,7 @@ class FrankaCustom:
                         print('end:', end)
                         certain = raw_input("You certain? [Y/n]: ")
                         if (certain == '' or certain.lower() == 'y'):
-                            arm_ros.move_to(end[0], end[1], end[2], 0.1)
-
+                            self.arm_ros.move_to(end[0], end[1], end[2], 0.1)
                 return scale
 
             # recording points
@@ -170,4 +196,6 @@ class FrankaCustom:
 
 
 if __name__ == '__main__':
-    main()
+    print('here')
+    hi = Control()
+    hi.move_to(0.4, 0.4, 0.4, 0.1)
