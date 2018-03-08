@@ -54,16 +54,16 @@ class image_converter:
 			print(e)
 			
 		threshold_area = 500
-		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-		blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-		thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
-		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		blurred = cv2.GaussianBlur(frame, (5, 5), 0)
+
+		# convert colours to hsv
+		hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 	 
-		# define range of red color in HSV
+		# define range of green color in HSV
 		lower_green = np.array([40, 100, 100])
 		upper_green = np.array([70, 255, 255])
  
-		# threshold the HSV image to get only blue colors
+		# threshold the HSV image to get only green colors
 		mask = cv2.inRange(hsv, lower_green, upper_green)
  
  
