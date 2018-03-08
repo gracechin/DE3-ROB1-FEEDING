@@ -238,6 +238,7 @@ int main(int argc, char** argv) {
       double vec_z = target_z - cur_z; 
 
       double l2_norm = sqrt(vec_x*vec_x + vec_y*vec_y + vec_z*vec_z); 
+      cout << "motion?" << endl;
 
       if (l2_norm < 0.02) {
           vel_x = 0.9*old_vel_x;
@@ -265,7 +266,7 @@ int main(int argc, char** argv) {
 
 
 
-      // stopping the motino properly
+      // stopping the motion properly
       // if (vel_norm < 0.001) {
       //   // stop program when target reached
       //   std::cout << std::endl << "Finished motion, shutting down..." << std::endl << std::flush;
