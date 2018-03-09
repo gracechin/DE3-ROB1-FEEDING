@@ -16,6 +16,7 @@ class Main:
     def pickupfood(self):
 
     def gotomouth(self):
+        pass
 
     def release(self):
 
