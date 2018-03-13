@@ -23,7 +23,7 @@ import ast
 
 class BaxterControl:
 	def __init__(self, arm="right"):
-		self.fred_node = rospy.init_node("fred_node") 
+		#self.fred_node = rospy.init_node("fred_node") 
 		self.default_arm = arm
 		self.ee_face_forward = [0.6879941859629728, 0.031021910731428202, 0.7249706767167493, -0.010915999110311306]
 
@@ -92,11 +92,13 @@ class BaxterControl:
 			[1.70168, 1.047, 3.05418, 2.618, 3.059, 2.094, 3.059])
 		seed_state = [0.0] * ik_solver.number_of_joints
 		# Inserting desired points for the solver to solve
-		sol = str(ik_solver.get_ik(seed_state, x, y, z, qx, qy, qz, qw)) # put these in as integers 
+		sol = str(ik_solver.get_ik(seed_state, x, y, z, qx, qy, qz, qw))
+		# put these in as integers 
 		# converting sol from a string to a list
 		sol.replace('(','[');
 		sol.replace(')',']');
 		sol = ast.literal_eval(sol)
+		print sol
 		print('Desired position:', [x, y, z])
 		print('Desired joint Angles:', sol)
 		print('setting joint angles....')
