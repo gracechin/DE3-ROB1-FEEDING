@@ -7,9 +7,25 @@ import sys
 import rospy
 from message_filters import Subscriber
 from geometry_msgs.msg import Point
+from baxter_control import BaxterControl
 
 SPEED_CONST = 10
 MIN_SPEED = 10
+
+
+def main(args):
+    fred = BaxterControl()
+    rospy.init_node('Reactive', anonymous=True)
+    mouth_point = Subscriber("/mouth_status", Point, queue_size = 10)
+    food_point = fred.get_ee_pos('right')
+    try:
+        rospy.spin()
+    except KeyboardInterrupt:
+        print("Shutting down")
+
+if __name__ == '__main__':
+    print("Reactive Control")
+    main(sys.argv)
 
 
 def get_difference_between_points(a, b):
@@ -59,7 +75,6 @@ class ReactiveControl:
         #self.direction = None
         self.speed = None
         self.kinematic_control = KinematicControl()
-        self.mouth_xyz_sub = Subscriber("/mouth_status", Point, queue_size = 10)
 
     def points_valid(self):
         return self.food_point is not None and self.mouth_point is not None
@@ -94,6 +109,4 @@ class ReactiveControl:
         self.update_robot_motion()
 
     def update_robot_motion(self):
-        self.kinematic_control.move_to_desired_endpoint(self.mouth_point, self.speed)
-
-
+        self.kinematic_control.move_to_desired_endpoint(self.mouth_point, self.speed
