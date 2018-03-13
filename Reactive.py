@@ -2,6 +2,11 @@
 
 from math import sqrt
 import baxter_interface
+import roslib
+import sys
+import rospy
+from message_filters import Subscriber
+from geometry_msgs.msg import Point
 
 SPEED_CONST = 10
 MIN_SPEED = 10
@@ -54,6 +59,7 @@ class ReactiveControl:
         #self.direction = None
         self.speed = None
         self.kinematic_control = KinematicControl()
+        self.mouth_xyz_sub = Subscriber("/mouth_status", Point, queue_size = 10)
 
     def points_valid(self):
         return self.food_point is not None and self.mouth_point is not None
