@@ -63,7 +63,6 @@ class Calibrate:
         
     def get_end_effector_pos(self):
         xyz_pos = self.arm.get_end_effector_pos()
-        [x, y, z] = [xyz_pos.position.x, xyz_pos.position.y, xyz_pos.position.z]
         print("End effector position:", xyz_pos) 
         return xyz_pos
 
