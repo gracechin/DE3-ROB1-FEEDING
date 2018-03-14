@@ -45,11 +45,13 @@ class ReactiveControl:
 	# Callback for mouthxyz changes. Make sure we subscribe with this as callback!
 	def mouth_callback(self,  mouth_point):
 		self.mouth_point = mouth_point
+		print "new mouth point"
 		self.update_values()
 
 	# Callback for foodxyz changes. Make sure we subscribe with this as callback!
 	def food_callback(self, food_point):
 		self.food_point = food_point
+		print "new food point"
 		self.update_values()
 
 	def set_distance(self):
@@ -72,4 +74,5 @@ class ReactiveControl:
 		self.update_robot_motion()
 
 	def update_robot_motion(self):
+		print "new motion plan"
 		fred.set_ee_pos(self.mouth_point.x, self.mouth_point_y, self.mouth_point.z)
