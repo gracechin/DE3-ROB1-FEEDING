@@ -110,13 +110,27 @@ class Calibration:
 
 
 if __name__ == '__main__':
-    from numpy import genfromtxt
-    my_data = genfromtxt('cal_data_example.csv', delimiter=',')
+    #rom numpy import genfromtxt
+    #my_data = genfromtxt('cal_data_example.csv', delimiter=',')
 
     num_pts = 4
 
-    A = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0], [2,0, 6.0, 9.0]])
-    B = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0], [2,0, 6.0, 9.0]])
+    A = np.array([[1.0, 2.0, 3.0],
+    [4.0, 5.0, 6.0],
+    [7.0, 8.0, 9.0], 
+    [2,0, 6.0, 9.0]])
+    B = np.array([[1.0, 2.0, 3.0],
+    [4.0, 5.0, 6.0], 
+    [7.0, 8.0, 9.0], 
+    [2,0, 6.0, 9.0]])
+
+
+    a = A.transpose()
+    B = B.transpose()
+    print(a)
+
+    print('A', np.shape(A))
+    print('B', np.shape(B))
 
     calibrate = Calibration(A, B)
 
