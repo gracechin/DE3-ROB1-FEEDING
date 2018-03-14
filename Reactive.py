@@ -14,20 +14,6 @@ SPEED_CONST = 100
 MIN_SPEED = 0.01
 
 
-def main(args):
-    baxter_control = BaxterControl()
-    rc = ReactiveControl(baxter_control)
-    rospy.init_node('Reactive', anonymous=True)
-    try:
-        rospy.spin()
-    except KeyboardInterrupt:
-        print("Shutting down")
-
-if __name__ == '__main__':
-    print("Reactive Control")
-    main(sys.argv)
-
-
 def get_difference_between_points(a, b):
     return b.x - a.x, b.y - a.y, b.z - a.z
 
@@ -125,3 +111,17 @@ class ReactiveControl:
 
     def __update_robot_motion__(self):
         self.baxter_control.set_ee_pos(self.mouth_point.x, self.mouth_point.y, self.mouth_point.z)
+
+
+def main(args):
+    baxter_control = BaxterControl()
+    rc = ReactiveControl(baxter_control)
+    rospy.init_node('Reactive', anonymous=True)
+    try:
+        rospy.spin()
+    except KeyboardInterrupt:
+        print("Shutting down")
+
+if __name__ == '__main__':
+    print("Reactive Control")
+    main(sys.argv)
