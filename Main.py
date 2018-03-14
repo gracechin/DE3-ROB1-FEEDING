@@ -24,9 +24,6 @@ class Run:
 		# self.mouth_status_baxter = Subscriber("/mouth_status", String)
 		# print(self.candy_status)
 
-
-		
-
 	def callback(self, C):
 		# print(C)
 		if C.data == 'True':
