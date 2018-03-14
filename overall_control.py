@@ -13,27 +13,26 @@ from Reactive import ReactiveControl
 class OverallControl:
 	def __init__(self):
 		self.candy_subscription = None
+		self.reactive = ReactiveControl()
 
 	def turn_on_candy(self):
 		self.candy_subscription = rospy.Subscriber("/candy", String, self.__candy_callback__)
 
 	def __candy_callback__(self, candy_state):
-		if candy_state == 'True':
-			rc.turn_on()
+		if candy_state:
+			self.go_to_mouth()
 		else: 
-			print(C)
-	def mouth(self, M):()
-		print(M)
+			self.play_recording()
 
-    def gotomouth(self):
+	def play_recording(self):
+		pass
+
+    def go_to_mouth(self):
         self.reactive.turn_on()
-
-    def release(self):
 
 
 def main(args):
 	ps = PerceptionSub()
-	rc = ReactiveControl()
 	rospy.init_node('overall', anonymous=True)
 	try:
 		rospy.spin()
