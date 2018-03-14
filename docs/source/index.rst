@@ -21,9 +21,10 @@ Third year MEng Design Engineering undergraduates Robotics 1 Project (2018)
 
 .. toctree::
    :maxdepth: 3
-   :caption: Franka Feeds
+   :caption: Fred Feeds
    
    using_franka
+   using_baxter
    perception
    help
 
