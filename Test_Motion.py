@@ -16,6 +16,8 @@ from baxter_core_msgs.srv import SolvePositionIK, SolvePositionIKRequest
 
 
 
+
+
 def main(args):
     fred = BaxterControl()
     rospy.init_node('Reactive', anonymous=True)
@@ -80,3 +82,4 @@ class ReactiveControl:
 		fred.set_ee_pos(self.mouth_point.x, self.mouth_point_y, self.mouth_point.z)
 
 
+>>>>>>> 9caad1bd52c9895f0d0fdc6696d7fbc59fcce6fa
