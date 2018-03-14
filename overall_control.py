@@ -14,9 +14,9 @@ from reactive import ReactiveControl
 class OverallControl:
     def __init__(self):
         self.candy_subscription = None
-        baxter_control = BaxterControl()
+        self.baxter_control = BaxterControl()
         self.reactive_control = ReactiveControl(baxter_control)
-        self.recorded_control = None # TODO: Recorded class here
+        # self.recorded_control = None # TODO: Recorded class here
 
     def begin_execution(self):
 		self.__begin_candy_subscription__()
@@ -48,7 +48,8 @@ class OverallControl:
 
     def __switch_to_recording__(self):
         self.reactive_control.turn_off()
-        # TODO: self.recorded_control -> call function for recorded motion
+        self.baxter_control.playback_scooping()
+
 
 
 def main(args):

@@ -20,8 +20,10 @@ class Calibration:
 
         number_pts = np.shape(frame_a_points)[0]
         ones = np.ones((number_pts, 1))
+        print ones
         mat_a = np.column_stack([frame_a_points, ones])
         mat_b = np.column_stack([frame_b_points, ones])
+        print type(mat_a[0][0])
 
         self.transformation = np.linalg.lstsq(mat_a, mat_b, rcond=None)[0]
         self.transformation_reversed = np.linalg.lstsq(mat_b, mat_a, rcond=None)[0]
@@ -116,23 +118,23 @@ if __name__ == '__main__':
     num_pts = 4
 
     A = np.array([[1.0, 2.0, 3.0],
-    [4.0, 5.0, 6.0],
-    [7.0, 8.0, 9.0], 
-    [2,0, 6.0, 9.0]])
+        [4.0, 5.0, 6.0],
+        [7.0, 8.0, 9.0], 
+        [2.0, 6.0, 9.0]], dtype='f')
     B = np.array([[1.0, 2.0, 3.0],
     [4.0, 5.0, 6.0], 
     [7.0, 8.0, 9.0], 
-    [2,0, 6.0, 9.0]])
+    [2.0, 6.0, 9.0]], dtype='f')
 
 
-    a = A.transpose()
-    B = B.transpose()
+    a = (A)
+    b = (B)
     print(a)
 
-    print('A', np.shape(A))
-    print('B', np.shape(B))
+    print('A', np.shape(a))
+    print('B', np.shape(b))
 
-    calibrate = Calibration(A, B)
+    calibrate = Calibration(a, b)
 
     sample_in = my_data[0, 0:3]
     sample_out = calibrate.transform(sample_in)
