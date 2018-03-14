@@ -115,8 +115,8 @@ if __name__ == '__main__':
 
     num_pts = 4
 
-    A = my_data[0:num_pts, 0:3]
-    B = my_data[0:num_pts, 3:]
+    A = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0], [2,0, 6.0, 9.0]])
+    B = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0], [2,0, 6.0, 9.0]])
 
     calibrate = Calibration(A, B)
 

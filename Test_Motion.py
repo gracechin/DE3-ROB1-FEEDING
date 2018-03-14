@@ -1,36 +1,38 @@
 # !/usr/bin/env python
 
+
 from math import sqrt
+from baxter_control import BaxterControl
 import baxter_interface
 import roslib
 import sys
 import rospy
-from message_filters import Subscriber
+from std_msgs.msg import String
 from geometry_msgs.msg import Point
-from baxter_control import BaxterControl
 import argparse
-
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 from std_msgs.msg import Header
 from baxter_core_msgs.srv import SolvePositionIK, SolvePositionIKRequest
 
 
+
 def main(args):
-	fred = BaxterControl()
-	rospy.init_node('Reactive', anonymous=True)
-	mouth_point = ReactiveControl.mouth_callback(Subscriber("/mouth_status", Point, queue_size = 10))
-	food_point = ReactiveControl.food_callback(fred.get_ee_pos('right'))
-	try:
-		rospy.spin()
-	except KeyboardInterrupt:
-		print("Shutting down")
+    fred = BaxterControl()
+    rospy.init_node('Reactive', anonymous=True)
+    mouth_point = ReactiveControl.mouth_callback(Subscriber("/mouth_status", Point, queue_size = 10))
+    food_point = ReactiveControl.food_callback(fred.get_ee_pos('right'))
+    try:
+        rospy.spin()
+    except KeyboardInterrupt:
+        print("Shutting down")
 
 if __name__ == '__main__':
-	print("Test Motion")
-	main(sys.argv)
+    print("Test Motion")
+    main(sys.argv)
 
 
 class ReactiveControl:
+
 	def __init__(self):
 		#self.food_point = None
 		self.mouth_point = None
@@ -76,3 +78,5 @@ class ReactiveControl:
 	def update_robot_motion(self):
 		print "new motion plan"
 		fred.set_ee_pos(self.mouth_point.x, self.mouth_point_y, self.mouth_point.z)
+
+
