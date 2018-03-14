@@ -1,4 +1,4 @@
-Using Franka
+Using Baxter
 ============
 
 Setting Up
@@ -26,35 +26,43 @@ To start Baxter:
 
 To run a python program:
 
-$ rosrun {name_of_package} {python_filename}
+.. code-block:: python
+
+	$ rosrun {name_of_package} {python_filename}
 
 Replace the content in the “{ …}” with the relevant text. 
 To make an executable python file, each python file starts with:
 
-#!/usr/bin/env python
+.. code-block:: python
+
+	#!/usr/bin/env python
 
 Modules are also imported as shown below:
 
-import rospy
-import rospkg
-import baxter_interface
-import baxter_external_devices
-from geometry_msgs.msg import (
-    PoseStamped,
-    Pose,
-    Point,
-    Quaternion,
-)
-from std_msgs.msg import (
-    Header,
-    Empty,
-)
+.. code-block:: python
+
+	import rospy
+	import rospkg
+	import baxter_interface
+	import baxter_external_devices
+	from geometry_msgs.msg import (
+	    PoseStamped,
+	    Pose,
+	    Point,
+	    Quaternion,
+	)
+	from std_msgs.msg import (
+	    Header,
+	    Empty,
+	)
 
 If you would like to move the arm, run the following to enable the arms in the terminal:
 
-$ rosrun baxter_tools enable_robot.py -e
+.. code-block:: python
 
-To disable the arms and prevent overheating, or when it is not in use, change  -e  to  -d. 
+	$ rosrun baxter_tools enable_robot.py -e
+
+To disable the arms and prevent overheating, or when it is not in use, change  ''-e''  to  ''-d''. 
 
 
 Controlling Baxter
