@@ -1,0 +1,28 @@
+Press power button on baxter
+cd ~/catkin_ws/
+bash baxter.sh
+rostopic list
+
+rosrun baxter_examples joint_position_keyboard.py
+
+# packages inside catkin_ws/src  # all our code to control baxter has to be in here
+			
+# need to create a package
+	
+# For new nodes or packages:
+# from terminal cd directory where new file is and make executable with:
+chmod +x filename.py
+#within baxter roscore within catkin_ws run catkin_make
+
+inside a python file to make it a node:
+#!/usr/bin/env python
+
+import rospy 
+import baxter_interface  # (pre built functions for baxter) get joint and other info and set 
+
+
+def main(): 
+	rospy.init_node("filename") 
+	left = baxter_interface.Limb('left)
+
+	
