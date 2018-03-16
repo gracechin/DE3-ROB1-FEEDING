@@ -3,21 +3,38 @@ Using Baxter
 
 Setting Up
 ^^^^^^^^^^
+The Baxter Robot can be started using the provided lab computers. 
+To connect to Baxter, ensure that your IP address is recorded in ''baxter.sh''.
+Find you IP address using ``ifconfig`` in the terminal. 
 
-Visit https://de3-rob1-chess.readthedocs.io to see how franka was setted up.
+.. code-block:: python
 
-This `site <https://frankaemika.github.io>`_ was used to install the live kernel, libfranka and franka_ros.
+	#-----------------------------------------------------------------------------#
+	#                 USER CONFIGURABLE ROS ENVIRONMENT VARIABLES                 #
+	#-----------------------------------------------------------------------------#
+	# Note: If ROS_MASTER_URI, ROS_IP, or ROS_HOSTNAME environment variables were
+	# previously set (typically in your .bashrc or .bash_profile), those settings
+	# will be overwritten by any variables set here.
+
+	# Specify Baxter's hostname
+	baxter_hostname="192.168.0.99"
+
+	# Set *Either* your computers ip address or hostname. Please note if using
+	# your_hostname that this must be resolvable to Baxter.
+	your_ip="XXXXXXXXXXX"
+	#your_hostname="my_computer.local"
+
+	# Specify ROS distribution (e.g. indigo, hydro, etc.)
+	ros_version="kinetic"
+	#-----------------------------------------------------------------------------#
+
 
 Running Baxter
 ^^^^^^^^^^^^^^
 
-The Baxter Robot can be started using the provided lab computers. 
-
 All codes are stored in the ''catkin_ws'' folder in the computer.
 The executable files are in the ''src'' folder. The folders inside the ''src'' folder are packages.
-To connect to Baxter, ensure that your IP address is recorded in ''baxter.sh''.
-
-To start Baxter: 
+To start Baxter, enter the correct directory and go into Baxter's terminal: 
 
 .. code-block:: python
 
@@ -30,7 +47,7 @@ To run a python program:
 
 	$ rosrun {name_of_package} {python_filename}
 
-Replace the content in the “{ …}” with the relevant text. 
+Replace the content in the ``{ …}`` with the relevant text. 
 To make an executable python file, each python file starts with:
 
 .. code-block:: python
@@ -62,7 +79,7 @@ If you would like to move the arm, run the following to enable the arms in the t
 
 	$ rosrun baxter_tools enable_robot.py -e
 
-To disable the arms and prevent overheating, or when it is not in use, change  ''-e''  to  ''-d''. 
+To disable the arms and prevent overheating, or when it is not in use, change  ``-e``  to  ``-d``. 
 
 
 Controlling Baxter
