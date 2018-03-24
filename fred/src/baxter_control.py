@@ -1,5 +1,10 @@
 #!/usr/bin/env python
-''' Hi THERE'''
+#
+# Benedict Greenberg, March 2018
+"""Python Module to control the Franka Arm though simple method calls.
+
+This module uses ``subprocess`` and ``os``.
+"""
 
 import rospy
 import rospkg
