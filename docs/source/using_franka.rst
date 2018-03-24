@@ -1,6 +1,10 @@
 Using Franka
 ============
 
+.. figure:: nstatic/arm_sketch.png
+    :align: center
+    :figclass: align-center
+
 Setting Up
 ^^^^^^^^^^
 
