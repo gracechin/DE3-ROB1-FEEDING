@@ -5,6 +5,6 @@ Control Baxter
 
 For ease of control of Baxter, a class was created in ``baxter_control.py`` which contains the following methods:
 
-.. automodule:: franka.franka_control
+.. automodule:: fred.src.baxter_control
   :members:
   :undoc-members:
