@@ -29,6 +29,29 @@ Find you IP address using ``ifconfig`` in the terminal.
 	#-----------------------------------------------------------------------------#
 
 
+Turning Baxter on
+^^^^^^^^^^^^^^^^^
+
+Ensure that Baxter is connected to the power cable, the emergency stop button, and the ethernet cable.
+
+.. figure:: nstatic/baxter_on.png
+    :align: center
+    :figclass: align-center
+
+Make sure that the emergency stop button is disengaged and then press the turn on button on the robot, as the person in the image is doing.
+
+Enable Robot
+^^^^^^^^^^^^
+
+If you would like to move the robot, run the following to enable the arms in the terminal:
+
+.. code-block:: python
+
+	$ rosrun baxter_tools enable_robot.py -e
+
+To disable the arms and prevent overheating, or when it is not in use, replace  ``-e``  to  ``-d``.
+Replace  ``-e``  to  ``-s`` for the status of the robot.
+
 Running Baxter
 ^^^^^^^^^^^^^^
 
@@ -73,19 +96,13 @@ Modules are also imported as shown below:
 	    Empty,
 	)
 
-If you would like to move the arm, run the following to enable the arms in the terminal:
 
-.. code-block:: python
-
-	$ rosrun baxter_tools enable_robot.py -e
-
-To disable the arms and prevent overheating, or when it is not in use, change  ``-e``  to  ``-d``. 
 
 
 Controlling Baxter
 ^^^^^^^^^^^^^^^^^^
 
-FRANKA can be controlled using the libfranka library, which is only accessible using the C++ language. Petar and Fabian have made some libfranka functions accessible by Python and the Chess team has made a Python library for FRANKA.
+`Baxter’s Python Interface <http://sdk.rethinkrobotics.com/wiki/Baxter_Interface>`_ is used to control the robot. `Research SDK Example Programs <http://sdk.rethinkrobotics.com/wiki/Foundations#Robot_Foundations>`_ of how it is used are in the Desktop of the lab computers and are also in the Baxter Research Robot website. For ease of access, a BaxterControl class was created.
 
 
 

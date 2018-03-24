@@ -35,12 +35,6 @@ class BaxterControl:
 		self.default_arm = arm
 		self.ee_face_forward = [-0.44540951393, 0.551357225282, -0.475534129977, 0.521040177201]
 
-	# def get_joint_velocities(self, limb=None): #work in progress
-	# 	if (limb==None): limb = self.default_arm
-	# 	arm = baxter_interface.Limb(limb)
-	# 	jv = arm.joint_velocities()
-	# 	return jv
-
 	def get_joints(self, limb=None): 
 		if (limb==None): limb = self.default_arm
 		publisher_name = 'baxter_' + limb + '_joints'
