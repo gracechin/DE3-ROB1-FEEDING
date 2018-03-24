@@ -1,4 +1,4 @@
-FRANKA vs Baxter
+Franka vs Baxter
 ================
 
 The team initially started off using FRANKA robot, however, due to control restraints, the team switched to controlling Baxter.
