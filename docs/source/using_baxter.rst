@@ -50,6 +50,7 @@ If you would like to move the robot, run the following to enable the arms in the
 	$ rosrun baxter_tools enable_robot.py -e
 
 To disable the arms and prevent overheating, or when it is not in use, replace  ``-e``  to  ``-d``.
+
 Replace  ``-e``  to  ``-s`` for the status of the robot.
 
 Running Baxter
@@ -57,6 +58,7 @@ Running Baxter
 
 All codes are stored in the ''catkin_ws'' folder in the computer.
 The executable files are in the ''src'' folder. The folders inside the ''src'' folder are packages.
+
 To start Baxter, enter the correct directory and go into Baxter's terminal: 
 
 .. code-block:: python
@@ -102,7 +104,7 @@ Modules are also imported as shown below:
 Controlling Baxter
 ^^^^^^^^^^^^^^^^^^
 
-`Baxter’s Python Interface <http://sdk.rethinkrobotics.com/wiki/Baxter_Interface>`_ is used to control the robot. `Research SDK Example Programs <http://sdk.rethinkrobotics.com/wiki/Foundations#Robot_Foundations>`_ of how it is used are in the Desktop of the lab computers and are also in the Baxter Research Robot website. For ease of access, a BaxterControl class was created.
+`Baxter’s Python Interface <http://sdk.rethinkrobotics.com/wiki/Baxter_Interface>`_ is used to control the robot. `Research SDK Example Programs <http://sdk.rethinkrobotics.com/wiki/Foundations#Robot_Foundations>`_ of how it is used are in the Desktop of the lab computers and are also in the Baxter Research Robot website.
 
 
 
