@@ -8,3 +8,4 @@ For ease of control of Baxter, a class was created in ``baxter_control.py`` whic
 .. automodule:: fred.src.baxter_control
   :members:
   :undoc-members:
+

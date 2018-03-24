@@ -157,38 +157,9 @@ class ReactiveControl:
 
 
 def main(args):
-    baxter_control = BaxterControl()
-    # perception_sub = PeceptionSub()
     rc = ReactiveControl()
     rospy.init_node('Reactive', anonymous=True)
-    # baxter_control.playback_gripping()
-    # mouth_point=perception_sub.get_kinect_mouth_pos()
-    # rc.__mouth_callback__(mouth_point)
     rc.turn_on()
-
-
-    # TEST for looping 
-
-
-
-
-
-
-    # [1.143, -0.945, 1.111]
-    # mouth_pos = Point()
-    # mouth_pos.x = 1.143
-    # mouth_pos.y = 0.207
-    # mouth_pos.z = 1.111
-    # print('mouthpos')
-    # rc.__mouth_callback__(mouth_pos)
-
-    # mouth_pos = Point()
-    # mouth_pos.x = 1.22639902182
-    # mouth_pos.y = -0.261341053846
-    # mouth_pos.z = 0.636436316253
-    # print('mouthpos')
-    # rc.__mouth_callback__(mouth_pos)
-
 
     try:
         rospy.spin()
