@@ -30,9 +30,9 @@ class Mouth:
 
 	def __init__(self):
 
-		self.face_status_pub = rospy.Publisher("/face_status_astra", String, queue_size=10)
-		self.mouth_xyz_pub = rospy.Publisher("/mouth_xyz_astra", Point, queue_size=10)
-		self.mouth_status_pub = rospy.Publisher("/mouth_status_astra", String, queue_size=10)
+		self.face_status_pub = rospy.Publisher("/face_status_kinetic", String, queue_size=10)
+		self.mouth_xyz_pub = rospy.Publisher("/mouth_xyz_kinetic", Point, queue_size=10)
+		self.mouth_status_pub = rospy.Publisher("/mouth_status_kinetic", String, queue_size=10)
 
 		self.bridge = CvBridge()
 		image_sub = Subscriber("/camera/rgb/image_rect_color",Image)

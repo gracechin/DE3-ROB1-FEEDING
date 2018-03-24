@@ -15,7 +15,7 @@ from std_msgs.msg import String
 # before running main make sure you have all the other files running
 
 # roslaunch openni2_launch openni2.launch
-# cam_astra.py
+# cam_kinetic.py
 # cam_baxter.py
 
 class PerceptionSub:
