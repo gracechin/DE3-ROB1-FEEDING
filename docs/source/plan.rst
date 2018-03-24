@@ -17,10 +17,6 @@ We want the live demo to show five key functions of the robot; detecting open/cl
 
 The team will focus on achieving the most important functions first and making sure that they are safe and work properly. Once completed the team will move on to implementing the less important functions of the robot depending on time restrictions.
 
-.. figure:: nstatic/arm_sketch.png
-    :align: center
-    :figclass: align-center
-
 Flowchart
 ^^^^^^^^^
 
