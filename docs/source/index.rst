@@ -24,6 +24,7 @@ Third year MEng Design Engineering undergraduates Robotics 1 Project (2018)
    :caption: FRED Feeds
 
    using_baxter
+   control_baxter
    perception
 
 .. toctree::
