@@ -5,6 +5,6 @@ Control Baxter
 
 For ease of control of Baxter, a ``BaxterControl`` class was created which contains the following methods:
 
-.. automodule:: BaxterControl
+.. automodule:: fred.src.baxter_control
   :members:
   :undoc-members:
