@@ -32,7 +32,7 @@ Find you IP address using ``ifconfig`` in the terminal.
 Turning Baxter on
 ^^^^^^^^^^^^^^^^^
 
-Ensure that Baxter is connected to the power cable, the emergency stop button, and the ethernet cable.
+First, ensure that Baxter is connected to the power cable, the emergency stop button, and the ethernet cable.
 
 .. figure:: nstatic/baxter_on.png
     :align: center
