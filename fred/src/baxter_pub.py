@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+''' Python Module to publish different robot information for BaxterControl to receive.
+'''
+
 import rospy
 import rospkg
 import baxter_interface
@@ -23,6 +26,8 @@ import ast
 
 class BaxterPub:
 	def __init__(self):
+		''' Various publishers for different robot information'''
+
 		self.right_pos = rospy.Publisher("baxter_right_pos", Point, queue_size=10)
 		self.left_pos = rospy.Publisher("baxter_left_pos", Point, queue_size=10)
 		self.right_ori = rospy.Publisher("baxter_right_ori", Quaternion, queue_size=10)
@@ -30,7 +35,11 @@ class BaxterPub:
 		self.right_joints = rospy.Publisher("baxter_right_joints", Float32MultiArray, queue_size=10)
 		self.left_joints = rospy.Publisher("baxter_left_joints", Float32MultiArray, queue_size=10)
 
-	def endeffector_info(self, limb): 
+	def endeffector_info(self, limb):
+		'''Returns the position and orientation of the end effector
+		limb <= choice of limb : "right" or "left"
+		'''
+
 		arm = baxter_interface.Limb(limb)
 		end_effector = arm.endpoint_pose()
 		end_pos = end_effector['position']
@@ -42,6 +51,9 @@ class BaxterPub:
 		return pos, ori
 
 	def joints_info(self, limb):
+		'''Returns the joint angles of a limb
+		limb <= choice of limb : "right" or "left"
+		'''
 		arm = baxter_interface.Limb(limb)
 		angles = arm.joint_angles().values()
 		joints = Float32MultiArray()
@@ -50,11 +62,11 @@ class BaxterPub:
 
 if __name__ == '__main__':
 	rospy.init_node("baxter_pub") 
-	rate = rospy.Rate(10) #10Hz
+	rate = rospy.Rate(10) #10Hz is the rate it collects data
 
+	# Publishing the different data constantly
 	while True:
 		baxter_pub = BaxterPub()
-
 		right_pos, right_ori = baxter_pub.endeffector_info("right")
 		left_pos, left_ori = baxter_pub.endeffector_info("left")
 		right_angles = baxter_pub.joints_info("right")

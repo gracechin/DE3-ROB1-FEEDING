@@ -92,18 +92,18 @@ class ReactiveControl:
     def __points_valid__(self):
         return self.food_point is not None and self.mouth_point is not None
 
-    # Callback for mouthxyz changes. Make sure we subscribe with this as callback!
+    # Callback for mouthxyz changes
     def __mouth_callback__(self, mouth_point):
         print('mouth callbacks')
+
         mouth_point = [mouth_point.x, mouth_point.y, mouth_point.z]
+
+        # Scale values found from calibration.py - !!! Replace m_list and c_list after calibration
         m_list = [-0.00011107096733081952, 0.0022319768342585443, -0.00022221026524383612]
         c_list = [0.92590354598174474, -0.60855149454118618, 0.63769496828478978]
-        # m_list = [0.00015460745105730597, -0.0049997272258064098, -0.00068621159500533184]
-        # c_list = [0.97864597698655964, 0.82640173090991298, 0.88186721651139377]
+
+        # Calibrating mouth point from camera --> mouth point from robot
         output_pt = []
-        scale = [m_list, c_list]
-        m_list=scale[0]
-        c_list=scale[1]
         for di in range(3):
             new_value = mouth_point[di]*m_list[di]+c_list[di]
             round_v = math.ceil(new_value * 1000.0) / 1000.0
@@ -113,6 +113,7 @@ class ReactiveControl:
         mouth_pt.y = output_pt[1]
         mouth_pt.z = output_pt[2]
 
+        # mouth_point is defined with calibrated values
         self.mouth_point = mouth_pt
         self.__update_values__()
 
@@ -157,18 +158,24 @@ class ReactiveControl:
 
 
 def main(args):
-    rc = ReactiveControl()
+    # initialise node
     rospy.init_node('Reactive', anonymous=True)
-    rc.turn_on()
+
+    # Create instance of classes
+    bc = BaxterControl() # see baxter_control.py for class explanation
+    rc = ReactiveControl() # see above for class explanation
+
+    # Robot control starts
+    bc.playback_scooping() # playback of scooping
+    rc.turn_on() # starts moving hand towards mouth
 
     try:
         rospy.spin()
     except KeyboardInterrupt:
         print("Shutting down")
 
-
-
 if __name__ == '__main__':
+    ''' when reactive.py is ran, the following is executed '''
     print("Reactive Control")
     main(sys.argv)
 
