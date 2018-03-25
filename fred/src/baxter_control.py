@@ -123,35 +123,27 @@ class BaxterControl:
 		return sol
 
 	def playback_scooping(self):
-		# print("Getting robot state... ")
-		# rs = baxter_interface.RobotEnable(CHECK_VERSION)
-		# print("Enabling robot... ")
-		# rs.enable()
-		print("Running Replay. Ctrl-c to quit")
+		''' Playback of the pre-recorded scooping candy motion using scooping.rec file'''
+		print("Running SCOOPING Replay. Ctrl-c to quit")
 		traj = Trajectory()
 		traj.parse_file(path.expanduser('/home/robin/catkin_ws/src/fred/src/scooping.rec'))
-		#for safe interrupt handling
-		#rospy.on_shutdown(traj.stop)
 		traj.start()
 		result = traj.wait()
 		print("Exiting - File Playback Complete")
 
 	def playback_gripping(self):
-		# print("Getting robot state... ")
-		# rs = baxter_interface.RobotEnable(CHECK_VERSION)
-		# print("Enabling robot... ")
-		# rs.enable()
-		print("Running Replay. Ctrl-c to quit")
+		''' Playback of the pre-recorded gripping candy motion using gripping.rec file'''
+		print("Running GRIPPING Replay. Ctrl-c to quit")
 		traj = Trajectory()
 		traj.parse_file(path.expanduser('/home/robin/catkin_ws/src/fred/src/gripping.rec'))
-		#for safe interrupt handling
-		#rospy.on_shutdown(traj.stop)
 		traj.start()
 		result = traj.wait()
 		print("Exiting - File Playback Complete")
 
 if __name__ == '__main__':
+	# Executed when baxter_control.py is running - space for testing BaxterControl class
 	rospy.init_node("fred_node") 
 	fred = BaxterControl(arm="right")
+
 
 

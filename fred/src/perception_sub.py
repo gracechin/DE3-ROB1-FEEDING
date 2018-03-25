@@ -107,6 +107,7 @@ class PerceptionSub:
 
 
 if __name__ == '__main__':
+    # Executed when perception_sub.py is running - space for testing BaxterControl class
     rospy.init_node("perception_sub_node")
     perceptioninfo = PerceptionSub()
 
