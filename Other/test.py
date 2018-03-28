@@ -1,5 +1,6 @@
 import numpy as np
 
+
 # Random data
 A = np.array([[255.0, 243.0, 0.0], [255.0, 248.0, 0.0]])
 B = np.array([[0.188, -0.308, 0.488], [0.188, -0.408, 0.488]])
@@ -31,3 +32,4 @@ for di in range(3):
 	output_pt.append(input_pt[di]*m_list[di]+c_list[di])
 
 print(output_pt)
+
