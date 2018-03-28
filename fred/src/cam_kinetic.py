@@ -37,6 +37,7 @@ class Mouth:
 	def __init__(self):
 		# initialise the topics being pubished:
 		self.face_status_pub = rospy.Publisher("/face_status_kinetic", String, queue_size=10)
+		#initialise node
 		self.mouth_xyz_pub = rospy.Publisher("/mouth_xyz_kinetic", Point, queue_size=10)
 		self.mouth_status_pub = rospy.Publisher("/mouth_status_kinetic", String, queue_size=10)
 
@@ -145,7 +146,7 @@ class Mouth:
 			self.mouth_xyz_pub.publish(xyz)
 			self.mouth_status_pub.publish(mouth_status)
 
-		# show images 
+		# show images
 		cv2.imshow("Depth window", depth_image_clone)
 		cv2.imshow("Image window", cv_image_clone)
 		cv2.waitKey(1)
