@@ -18,9 +18,6 @@ target_coords.layout.dim[1].label = "speed"
 target_coords.layout.dim[1].size = 1
 
 
-
-
-
 def franka_move_to(x, y, z, speed):
     # rate = rospy.Rate(10) # 10hz
     # target_coords
