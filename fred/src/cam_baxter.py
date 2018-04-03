@@ -1,67 +1,82 @@
-from __future__ import print_function
+# Jacob Mitchell, Ina Roll Backe, Tilly Supple 2018
+''' Python Module to access and analyse video stream from Baxter hand camera.
 
-import roslib
-#roslib.load_manifest('my_package')
+Before running this file, run the following:
+	$ cd catkin ws/
+	$ baxter bash.sh
+'''
+
+from __future__ import print_function
 import sys
-import rospy
-import cv2
-from std_msgs.msg import String
+
+import rospy # rospy is the ros python wrapper
+from std_msgs.msg import String # msgs are for interpreting different types of topic subscriptions
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Point
-from cv_bridge import CvBridge, CvBridgeError
-from imutils import face_utils
-import numpy as np
-import argparse
-import imutils
-import dlib
-import cv2
 
-predictor_path = "/home/robin/catkin_ws/src/fred/src/perception/shape_predictor_68_face_landmarks.dat"
+from cv_bridge import CvBridge, CvBridgeError # cv bridge is  a package to create an image from topic subscription data
+import dlib # dlib is a machine learning package with built in face and feature detection. check this link for instructions on how to install https://www.pyimagesearch.com/2017/04/03/facial-landmarks-dlib-opencv-python/
+import imutils # this package contains lots of little short cuts for working with the facial landmarks
+from imutils import face_utils
+import numpy as np # numpy is used for numerical functions
+import cv2 # opencv package
+
+# pre-defined face and facial feature detection data files have to be accessed:
+predictor_path = "/home/robin/catkin_ws/src/fred/src/perception/shape_predictor_68_face_landmarks.dat" # this must be downloaded
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 
 class image_converter:
-
+	'''This is a class that gets run continuously by rospy.spin.
+	It has two functions; one is to identify the presense of sweets on the spoon end effector (food) and the second is facial detection (mouth)'''
 	def __init__(self):
+		# initialise the topics being pubished:
 		self.candy_pub = rospy.Publisher("/candy",String, queue_size=10)
 		self.face_status_pub = rospy.Publisher("/face_status", String, queue_size=10)
 		self.mouth_xy_pub = rospy.Publisher("/mouth_xy", Point, queue_size=10)
 		self.mouth_status_pub = rospy.Publisher("/mouth_status", String, queue_size=10)
+
 		self.candycount = 0
 
+		#initialise bridge:
 		self.bridge = CvBridge()
-		self.image_sub = rospy.Subscriber("/cameras/right_hand_camera/image",Image,self.callback)
+
+		# initialise subscriber:
+		self.image_sub = rospy.Subscriber("/cameras/right_hand_camera/image",Image,self.callback) # note the subsriber requires a callback function to send the subsription data to, it is not just a variable
 
 	def callback(self,data):
+		'''This function is a middle man for the two other functions; mouth() and food()
+		It takes the subscrition data and converts it into an image before sending it on'''
 		try:
 			cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-			cv_image = imutils.rotate(cv_image, 90)
+			cv_image = imutils.rotate(cv_image, 90) # the image is rotated because we fixed the spoon at 90 degrees so that it could be seen clearly by the camera
 		except CvBridgeError as e:
 			print(e)
 
-		spoon_ROI = cv_image[225:255,225:290]
-		self.food(spoon_ROI)
-		self.mouth(cv_image)
+		spoon_ROI = cv_image[225:255,225:290] # the region of interest of the spoon is pre-selected based on th position of the spoon within the camera frame
+		self.food(spoon_ROI) # call food analysis function with only the required region of image, this saves cpu and doesn't pick up colour from unwanted areas
+		self.mouth(cv_image) # image sent to mouth function for face analysis
 
 		
 	def mouth(self,cv_image):
-		
-		gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-		rects = detector(gray, 1)
-		if len(rects) > 0:
+		'''This function takes the image and returns key information about the user's face'''
+		gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY) # facial detection is much faster on a black and white image
+		rects = detector(gray, 1) # detector returns a list of rectangles that contain faces within the image
+
+		if len(rects) > 0:		# if no rectangles found then we can say that no faces were found in the image
 			face_status = 'True'
 		else: 
 			face_status = 'False'
 
 
-		for (i, rect) in enumerate(rects):
-			shape = predictor(gray, rect)
-			shape = face_utils.shape_to_np(shape)
+		for (i, rect) in enumerate(rects):		# within the rectangles with faces
+			shape = predictor(gray, rect)		# run feature detection using the dlib predictor
+			shape = face_utils.shape_to_np(shape)	# shape and features (line below) make it easier to access and index the features
 			features = face_utils.FACIAL_LANDMARKS_IDXS.items()
 			mouth = features[0]
-			points = shape[mouth[1][0]:mouth[1][1]]
+			points = shape[mouth[1][0]:mouth[1][1]]	# take a look at the facial landmark numbering in the perception folder to make sense of the numbers here
 			for (x,y) in points: 
-				cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)
+				cv2.circle(cv_image, (x, y), 1, (0, 0, 255), -1)	# draw a circle around each mouth landmark
 
 			inside_points = shape[60:68]
 			mouth_top = shape[62]
@@ -69,7 +84,7 @@ class image_converter:
 			mouth_left = shape[61]
 			mouth_right = shape[65]
 
-			mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2
+			mouth_center_x = mouth_bottom[0] +(mouth_top[0]-mouth_bottom[0])/2	# geometrically finding the center of the mouth
 			mouth_center_y = mouth_bottom[1] +(mouth_top[1]-mouth_bottom[1])/2
 			cv2.circle(cv_image, (mouth_center_x, mouth_center_y), 1, (255, 0, 255), 5)
 
@@ -78,26 +93,28 @@ class image_converter:
 			xyz.y = mouth_center_y
 			xyz.z = 0
 
+			# the mouth ratio is a very useful way of determining if the mouth is open or closed; although the size of the mouth appears to change, the ratio is constant
 			mouth_ratio = float(abs(mouth_top[1]- mouth_bottom[1])/(abs(mouth_left[0] - mouth_right[0])))
-
 			if mouth_ratio > 0: 
 				mouth_status = 'True'
 			else: 
 				mouth_status = 'False'
+			# publish the position of the mouth center and the state of the mouth
 			self.mouth_xy_pub.publish(xyz)		
 			self.mouth_status_pub.publish(mouth_status)
 			print('xyz', xyz)
 			print('mouth_status', mouth_status)
 
-
+		# publsish the state of the face
 		self.face_status_pub.publish(face_status)
 		print('face_status', face_status)
-		
+
+		# show the image for you to see, this dramatically slows the script down.
 		cv2.imshow("Image window", cv_image)
-		
 		cv2.waitKey(1)
 
 	def food(self,frame):
+		''' This function analyses the food on the spoon'''
 		candy_state = 'False'
 		candy_trigger = 'False'
 		threshold_area = 0
@@ -130,12 +147,12 @@ class image_converter:
  
 						cX = int(M['m10'] / M['m00'])
 						cY = int(M['m01'] / M['m00'])
- 
+
 						# rows, cols = mask.shape[:2]
 						# [vx, vy, x, y] = cv2.fitLine(c, cv2.DIST_L2, 0, 0.01, 0.01)
 						# lefty = int((-x * vy / vx) + y)
 						# righty = int(((cols - x) * vy / vx) + y)
- 
+
 						# cv2.line(frame,(cols-1,righty),(0, lefty),(0, 255,0),2)
 						#cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
 						cv2.circle(frame, (cX, cY), 7, (255, 255, 255), -1)
