@@ -99,6 +99,11 @@ Modules are also imported as shown below:
 	)
 
 
-Credits 
+Controlling Baxter
+^^^^^^^^^^^^^^^^^^
+For more information on how to control Baxter to feed, please take a look at our `report.
+<https://docs.google.com/document/d/1gYLpNBUq5_0UUhcM4bcgzlkC_TXOMYgSC03uhh11frI/edit?usp=sharing>`_
+
+Credits
 ^^^^^^^
 Felix in the DeVito team for the crash course on how to use Baxter. 
