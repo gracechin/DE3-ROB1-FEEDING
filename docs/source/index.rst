@@ -15,17 +15,26 @@ Third year MEng Design Engineering undergraduates Robotics 1 Project (2018)
    :maxdepth: 3
    :caption: Project Information
 
-   overview
+   brief_given
    plan
 
 
 .. toctree::
    :maxdepth: 3
-   :caption: FRED Feeds
+   :caption: Technical Development
 
+   overview
    using_baxter
-   control_baxter
-   perception
+   baxter_control
+   camera
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Demonstration
+
+   scenerio
+   demo
+   step_by_step
 
 .. toctree::
    :maxdepth: 3

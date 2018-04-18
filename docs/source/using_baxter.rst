@@ -99,6 +99,7 @@ Modules are also imported as shown below:
 	)
 
 
-Credits 
+
+Credits
 ^^^^^^^
 Felix in the DeVito team for the crash course on how to use Baxter. 
