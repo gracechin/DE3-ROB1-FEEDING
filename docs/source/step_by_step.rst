@@ -28,10 +28,10 @@ In the second terminal execute the following:
 
 
 
-4.2.2 Baxter Moving to Mouth Demo
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Baxter Moving to Mouth Demo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This demo will program Baxter to scoop food and to put it to the detected mouth position from the Kinect camera. To program the robot to grip candy as oppose to scoop candy, simply replace bc.playback_scooping() to bc.playback_gripping() in the main part of reactive.py. See Figure 21 for the location of this code.
+This demo will program Baxter to scoop food and to put it to the detected mouth position from the Kinect camera. To program the robot to grip candy as oppose to scoop candy, simply replace bc.playback_scooping() to bc.playback_gripping() in the main part of reactive.py.
 
 
 .. figure:: nstatic/scoop_replace.png
@@ -43,7 +43,7 @@ The gray boxed line shows where the code can be changed so that Baxter is grippi
 Below is the step-by-step method to run the demo:
 
     1. Baxter must be calibrated beforehand.
-    2. Input the scale values from calibration into the __mouth_callback__ function in reactive.py python file. Figure 22 shows where.
+    2. Input the scale values from calibration into the __mouth_callback__ function in reactive.py python file.
 
 .. figure:: nstatic/calibrate_replace.png
     :align: center
@@ -76,22 +76,22 @@ The grey box outlines where in the code the new scale values should be placed.
 
 .. code-block:: python
 
->> rosrun baxter_interface joint_trajectory_action_server.py --mode velocity
+    >> rosrun baxter_interface joint_trajectory_action_server.py --mode velocity
 
 
 - **Terminal 4 |** This runs the baxter publisher which helps the BaxterControl class to receive information from Baxter.
 
 .. code-block:: python
 
->> cd src/fred/src
->> python baxter_pub.py
+    >> cd src/fred/src
+    >> python baxter_pub.py
 
 
 - **Terminal 5 |** This runs the main program that uses the various data from the other running programs.
 
 .. code-block:: python
 
->> cd src/fred/src
->> python reactive.py
+    >> cd src/fred/src
+    >> python reactive.py
 
 
